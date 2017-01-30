@@ -10,10 +10,11 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+
 public class MainActivity extends AppCompatActivity {
 
     RelativeLayout background;
-    Button errorButton, aboutButton, gameButton, quitButton;
+    Button errorButton, aboutButton, dictionaryButton, quitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 background.setBackgroundColor(Color.parseColor("#006699we231"));
+            }
+        });
+
+
+        //add DICTIONARY button
+        dictionaryButton = (Button) findViewById(R.id.dictionary);
+        dictionaryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dictionary = new Intent(MainActivity.this, DictionaryActivity.class);
+                startActivity(dictionary);
             }
         });
 

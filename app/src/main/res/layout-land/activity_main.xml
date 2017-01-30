@@ -29,10 +29,10 @@
         android:layout_alignStart="@+id/about" />
 
     <Button
-        android:text="@string/gameButton"
+        android:text="@string/dictionaryButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:id="@+id/game"
+        android:id="@+id/dictionary"
         android:layout_marginTop="17dp"
         android:layout_below="@+id/error"
         android:layout_alignLeft="@+id/error"
@@ -44,7 +44,7 @@
         android:id="@+id/quit"
         android:layout_marginTop="24dp"
         android:layout_width="150dp"
-        android:layout_below="@+id/game"
-        android:layout_alignLeft="@+id/game"
-        android:layout_alignStart="@+id/game" />
+        android:layout_below="@+id/dictionary"
+        android:layout_alignLeft="@+id/dictionary"
+        android:layout_alignStart="@+id/dictionary" />
 </RelativeLayout>

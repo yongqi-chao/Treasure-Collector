@@ -4,7 +4,7 @@
     <string name="backButton">back</string>
     <string name="aboutButton">About</string>
     <string name="errorButton">Generate Error</string>
-    <string name="gameButton">Word Game</string>
+    <string name="dictionaryButton">Dictionary</string>
     <string name="quitButton">Quit</string>
     <string name="pictureDescription">Picture of myself</string>
 </resources>
