@@ -14,17 +14,16 @@
         android:text="@string/aboutButton"
         android:layout_height="wrap_content"
         android:id="@+id/about"
-        android:layout_marginTop="23dp"
+        android:layout_width="150dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_width="150dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="@string/errorButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/error"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="16dp"
         android:layout_below="@+id/about"
         android:layout_alignLeft="@+id/about"
         android:layout_alignStart="@+id/about" />
@@ -34,16 +33,16 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/game"
+        android:layout_marginTop="17dp"
         android:layout_below="@+id/error"
         android:layout_alignLeft="@+id/error"
-        android:layout_alignStart="@+id/error"
-        android:layout_marginTop="42dp" />
+        android:layout_alignStart="@+id/error" />
 
     <Button
         android:text="@string/quitButton"
         android:layout_height="wrap_content"
         android:id="@+id/quit"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="24dp"
         android:layout_width="150dp"
         android:layout_below="@+id/game"
         android:layout_alignLeft="@+id/game"
