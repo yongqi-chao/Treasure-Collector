@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 public class DictionaryActivity extends AppCompatActivity {
 
-    Button returnButton;
+    Button returnButton, clearButton;
     EditText editText;
 
     @Override
@@ -21,6 +21,15 @@ public class DictionaryActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editText);
 
 
+
+        //add CLEAR button
+        clearButton = (Button) findViewById(R.id.clearButton);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+            }
+        });
 
 
         //add RETURN button
