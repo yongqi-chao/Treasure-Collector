@@ -14,3 +14,4 @@ settings.gradle
 gradlew
 .gradle/
 app/libs/
+/.gradle
