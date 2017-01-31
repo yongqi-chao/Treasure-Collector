@@ -1,11 +1,15 @@
 package edu.neu.madcourse.yongqichao;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class DictionaryActivity extends AppCompatActivity {
 
+    Button returnButton;
     EditText editText;
 
     @Override
@@ -16,6 +20,17 @@ public class DictionaryActivity extends AppCompatActivity {
 
         editText = (EditText) findViewById(R.id.editText);
 
+
+
+
+        //add RETURN button
+        returnButton = (Button) findViewById(R.id.returnButton);
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
     }

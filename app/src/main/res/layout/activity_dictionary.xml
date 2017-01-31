@@ -20,4 +20,32 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
         android:id="@+id/editText" />
+
+    <Button
+        android:text="@string/returnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:id="@+id/returnButton" />
+
+    <Button
+        android:text="@string/acknoledgements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/returnButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="39dp"
+        android:id="@+id/acknowledgment" />
+
+    <Button
+        android:text="@string/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/acknowledgment"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:id="@+id/clearButton" />
+
 </RelativeLayout>

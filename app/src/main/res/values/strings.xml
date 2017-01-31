@@ -7,4 +7,9 @@
     <string name="dictionaryButton">Dictionary</string>
     <string name="quitButton">Quit</string>
     <string name="pictureDescription">Picture of myself</string>
+
+    <string name="returnButton">Return to Menu</string>
+    <string name="clearButton">Clear</string>
+    <string name="acknoledgements">Acknowledgment</string>
+
 </resources>
