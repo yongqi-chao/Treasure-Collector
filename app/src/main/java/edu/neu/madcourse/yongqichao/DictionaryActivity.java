@@ -175,7 +175,7 @@ public class DictionaryActivity extends AppCompatActivity {
         listofword = (ListView) findViewById(R.id.listofw);
 
 //        String[] values = new String[] { "android", "aah", "aah", "aam", "abc", "app"};
-        final ArrayList<String> list = new ArrayList<String>();
+        final ArrayList<String> list = new ArrayList<>();
 //        for (int i = 0; i < values.length; ++i) {
 //            if(n.isWord(values[i])) {
 //                list.add(values[i]);
@@ -185,7 +185,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
         //a way of entering text
         enterText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        final ArrayList<String> source = new ArrayList<String>();
+        final ArrayList<String> source = new ArrayList<>();
 
         enterText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -212,7 +212,7 @@ public class DictionaryActivity extends AppCompatActivity {
                 System.out.println("3rd");
 
                 if(!source.isEmpty()) {
-                    ArrayAdapter<String> enterTextAdapter = new ArrayAdapter<String>(DictionaryActivity.this,
+                    ArrayAdapter<String> enterTextAdapter = new ArrayAdapter<>(DictionaryActivity.this,
                             android.R.layout.simple_dropdown_item_1line, source);
                     enterText.setAdapter(enterTextAdapter);
                     System.out.println("sdasd");
@@ -244,7 +244,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
 
         //listview of list of words
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 list);
         listofword.setAdapter(adapter);
