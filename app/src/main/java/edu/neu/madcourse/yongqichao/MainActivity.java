@@ -27,6 +27,7 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Scanner;
@@ -113,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         //add QUIT button.
         quitButton = (Button)findViewById(R.id.quit);
         quitButton.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
         Map<String,String> newHash= new HashMap<>();
-
 
         // SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences.getString("low", "first");
@@ -264,28 +263,28 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-//        System.out.println("finish this hash table");
-//        String fileName = "MyFile";
-//        Gson gson= new Gson();
-//        System.out.println(newHash.size());
-//        String json=gson.toJson(newHash);
-//        String content = json;
-//        System.out.println(json.length());
-//
-//
-//
-//
-//        File file;
-//        FileOutputStream output;
-//        try {
-//            // file = File.createTempFile("MyCache", null, getCacheDir());
-//            file = new File(getCacheDir(), "MyCache");
-//            output = new FileOutputStream(file);
-//            output.write(content.getBytes());
-//            output.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        System.out.println("finish this hash table");
+        String fileName = "MyFile";
+        Gson gson= new Gson();
+        System.out.println(newHash.size());
+        String json=gson.toJson(newHash);
+        String content = json;
+        System.out.println(json.length());
+        //chang du 7------   qudiao   hashmap string de chang du???
+
+
+
+        File file;
+        FileOutputStream output;
+        try {
+            // file = File.createTempFile("MyCache", null, getCacheDir());
+            file = new File(getCacheDir(), "MyCache");
+            output = new FileOutputStream(file);
+            output.write(content.getBytes());
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 //        System.out.println("MyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFile: ");
 //

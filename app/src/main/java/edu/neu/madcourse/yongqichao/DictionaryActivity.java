@@ -48,7 +48,7 @@ public class DictionaryActivity extends AppCompatActivity {
     public Trie c = new Trie();
     public Trie d = new Trie();
     public Trie e = new Trie();
-    public Trie f = new Trie();
+    //public Trie f = new Trie();
     public Trie g = new Trie();
     public Trie h = new Trie();
     public Trie i = new Trie();
@@ -69,7 +69,7 @@ public class DictionaryActivity extends AppCompatActivity {
     public Trie x = new Trie();
     public Trie y = new Trie();
     public Trie z = new Trie();
-    public HashMap<String,Integer> newHash= new HashMap<>();
+    public HashMap<String,String> newHash= new HashMap<>();
 
 
     @Override
@@ -89,27 +89,29 @@ public class DictionaryActivity extends AppCompatActivity {
 
         File file;
         FileInputStream input;
-        try {
-            // file = File.createTempFile("MyCache", null, getCacheDir());
-            file = new File(getCacheDir(), "MyCache");
-            input = new FileInputStream(file);
-            Gson gson= new Gson();
-            //input.read();
-            StringBuilder builder = new StringBuilder();
-            int ch;
-            while((ch = input.read()) != -1){
-                builder.append((char)ch);
-                //System.out.println(builder);
-            }
-            String asa = builder.toString();
-            //q = gson.fromJson(asa,Trie.class);
-            System.out.println(builder.length());
-            newHash = gson.fromJson(asa, HashMap.class);
-            System.out.println(newHash.size());
-            input.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // file = File.createTempFile("MyCache", null, getCacheDir());
+//            //file = new File(getCacheDir(), "Attempt1");
+//            //input = new FileInputStream(file);
+//            input = openFileInput("Attempt1");
+//            Gson gson= new Gson();
+//            //input.read();
+//            StringBuilder builder = new StringBuilder();
+//            int ch;
+//            while((ch = input.read()) != -1){
+//                builder.append((char)ch);
+//            }
+//            String asa = builder.toString();
+//            //q = gson.fromJson(asa,Trie.class);
+//            System.out.println(builder.length());
+//            newHash = gson.fromJson(asa, HashMap.class);
+//            System.out.println(newHash.size());
+//            input.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
        // Intent ii = getIntent();
 
 //        Scanner s = new Scanner(getResources().openRawResource(R.raw.wordlist));
@@ -130,15 +132,15 @@ public class DictionaryActivity extends AppCompatActivity {
         System.out.println("finish this q trie");
 //
 //        //read trie
-//        if(inputStream == null) {
-//            try {
-//                inputStream = openFileInput("a");
-//                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-//                newHash = (HashMap<String, Integer>) objectInputStream.readObject();
-//                objectInputStream.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();}
-//        }
+        if(inputStream == null) {
+            try {
+                inputStream = openFileInput("axz");
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                newHash = (HashMap<String, String>) objectInputStream.readObject();
+                objectInputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();}
+        }
 
 //        System.out.println("finish this a trie");
 //        if(inputStream == null) {
