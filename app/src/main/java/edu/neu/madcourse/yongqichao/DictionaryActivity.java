@@ -7,11 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Color;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +25,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -71,18 +78,92 @@ public class DictionaryActivity extends AppCompatActivity {
     public Trie z = new Trie();
     public HashMap<String,String> newHash= new HashMap<>();
 
+    public ProgressBar progressBar;
+    TextView diconaryLoadingInfo;
+    public char firstletter;
+    public String ss;
+    public Scanner text;
+    private int mProgressStatus = 1;
+    private Handler mHandler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dictionary);
+        setTitle("Test Dictionary");
+
+
+        diconaryLoadingInfo = (TextView) findViewById(R.id.dictionaryLoadingInfo);
+        diconaryLoadingInfo.setText("installing dictionary component");
+        progressBar = (ProgressBar) findViewById(R.id.progressBar2);
+        progressBar.setMax(26);
+        progressBar.setScaleY(6f);
+
+        text = new Scanner(getResources().openRawResource(R.raw.wordlist));
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                firstletter = 'a';
+                for (; mProgressStatus <= 26 ; mProgressStatus ++){
+
+                    //mProgressStatus += 1;
+                    //if(inputStream == null) {
+                        try {
+                            inputStream = openFileInput("" + firstletter);
+                            System.out.println(""+firstletter);
+                            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                            HashMap<String,String> adder;//= new HashMap<>();
+                            adder = (HashMap<String, String>) objectInputStream.readObject();
+                            newHash.putAll(adder);
+                            System.out.println(newHash.size());
+                            objectInputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();}
+                   // }
+                    firstletter++;
+
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(mProgressStatus < 25) {
+                                progressBar.setProgress(mProgressStatus);
+                                //diconaryLoadingInfo.setText("loading dictionary component:" + mProgressStatus + "/26");
+                                String info = "loading dictionary component:" + mProgressStatus + "/26"
+                                        + ":abcdefghijklmnopqrstuvwxyz";
+                                Spannable spannable = new SpannableString(info);
+
+                                spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 34, mProgressStatus + 34, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                spannable.setSpan(new ForegroundColorSpan(Color.RED), mProgressStatus + 34, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                diconaryLoadingInfo.setText(spannable, TextView.BufferType.SPANNABLE);
+                            }
+                            else{
+                                progressBar.setVisibility(View.GONE);
+                                diconaryLoadingInfo.setText("loading dictionary component: FINISHED");
+                            }
+                        }
+                    });
+                }
+
+                text.close();
+            }
+        }).start();
+
+
+
+
+
 
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // this.getSharedPreferences("low", Context.MODE_PRIVATE);
         //String low = prefs.getString("low", null);
         //Gson gson= new Gson();
         //Trie n = gson.fromJson(low,Trie.class);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dictionary);
-        setTitle("Test Dictionary");
+
 
         System.out.println("start this q new trie");
 
@@ -132,15 +213,15 @@ public class DictionaryActivity extends AppCompatActivity {
         System.out.println("finish this q trie");
 //
 //        //read trie
-        if(inputStream == null) {
-            try {
-                inputStream = openFileInput("axz");
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                newHash = (HashMap<String, String>) objectInputStream.readObject();
-                objectInputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();}
-        }
+//        if(inputStream == null) {
+//            try {
+//                inputStream = openFileInput("axz");
+//                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+//                newHash = (HashMap<String, String>) objectInputStream.readObject();
+//                objectInputStream.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();}
+//        }
 
 //        System.out.println("finish this a trie");
 //        if(inputStream == null) {

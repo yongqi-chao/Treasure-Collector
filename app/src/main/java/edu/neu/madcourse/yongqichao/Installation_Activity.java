@@ -3,7 +3,9 @@ package edu.neu.madcourse.yongqichao;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +31,7 @@ public class Installation_Activity extends Activity {
 
     TextView installText;
     public char firstletter;
+    public char nextletter;
     public String ss;
     public Scanner text;
     public Map<String,String> newHash= new HashMap<>();
@@ -54,74 +57,110 @@ public class Installation_Activity extends Activity {
         text = new Scanner(getResources().openRawResource(R.raw.wordlist));
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setMax(500000);
+        progressBar.setMax(480000);
         progressBar.setScaleY(6f);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putString("install","123");
+//        editor.apply();
 
+        String name = preferences.getString("install", "123");
+        if(name.equalsIgnoreCase("123")) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-//                while (text.hasNext()){
-//                    mProgressStatus += 1;
-//                    ss = text.next();
-//                    firstletter = ss.charAt(0);
-//                    newHash.put(ss,ss);
-////
-////                    if(firstletter == 'a' || firstletter == 'z'
-////                                          || firstletter == 'x'){
-////                        System.out.println("installl this QQQQQQWERTYUI" + mProgressStatus);
-////
-////                    }
+                firstletter = 'a';
+                while (text.hasNext()){
+                    mProgressStatus += 1;
+                    ss = text.next();
+                    nextletter = ss.charAt(0);
+                    if(nextletter != firstletter){
+                        //HashMap.class.getField(name).set(this,Boolean.TRUE);
+                        try {
+                            output = openFileOutput(""+firstletter, Context.MODE_PRIVATE);
+                            ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
+                            objectOutputStream.writeObject(newHash);
+                            objectOutputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        firstletter++;
+                        newHash.clear();
+
+                    }
+                    newHash.put(ss,ss);
 //
-//                    mHandler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
+//                    if(firstletter == 'a' || firstletter == 'z'
+//                                          || firstletter == 'x'){
+//                        System.out.println("installl this QQQQQQWERTYUI" + mProgressStatus);
 //
-//                            progressBar.setProgress(mProgressStatus);
-//                            installText.setText("installing dictionary component:" + mProgressStatus/5000 + "%");
-//                        }
-//                    });
+//                    }
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            progressBar.setProgress(mProgressStatus);
+                            installText.setText("installing dictionary component:" + mProgressStatus/5000 + "%");
+                        }
+                    });
+                }
+
+                text.close();
+
+                //finishSaveData(newHash);
+                ///////////////////////////////////////////////////////////////////////////////
+//                System.out.println("finish this hash table");
+//                String fileName = "MyFile";
+//                Gson gson= new Gson();
+//                System.out.println(newHash.size());
+//                String json=gson.toJson(newHash);
+//                String content = json;
+//                System.out.println(json.length());
+//                //chang du 7------   jian shao   hashmap string de chang du???
+//
+//                try {
+//                    // file = File.createTempFile("MyCache", null, getCacheDir());
+//                    //file = new File(getCacheDir(), "Attampt1");
+//                    System.out.println("qazqazqazqazqazqazqazqazzqazqazqazqzazqazqazqzzqazzqaswwsxsxsddcdcrccrdcdrdccdrcdrcdrcdrcrdcdrcdrcdrcdrcdrcdrcdrcrdcrddcrrdccrd");
+//                    output = openFileOutput("Attempt1", Context.MODE_PRIVATE);
+//                    //output = new FileOutputStream(file);//, Context.MODE_PRIVATE);
+//                    output.write(content.getBytes());
+//                    output.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
 //                }
-//
-//                text.close();
-//
-//                //finishSaveData(newHash);
-//                ///////////////////////////////////////////////////////////////////////////////
-////                System.out.println("finish this hash table");
-////                String fileName = "MyFile";
-////                Gson gson= new Gson();
-////                System.out.println(newHash.size());
-////                String json=gson.toJson(newHash);
-////                String content = json;
-////                System.out.println(json.length());
-////                //chang du 7------   jian shao   hashmap string de chang du???
-////
-////                try {
-////                    // file = File.createTempFile("MyCache", null, getCacheDir());
-////                    //file = new File(getCacheDir(), "Attampt1");
-////                    System.out.println("qazqazqazqazqazqazqazqazzqazqazqazqzazqazqazqzzqazzqaswwsxsxsddcdcrccrdcdrdccdrcdrcdrcdrcrdcdrcdrcdrcdrcdrcdrcdrcrdcrddcrrdccrd");
-////                    output = openFileOutput("Attempt1", Context.MODE_PRIVATE);
-////                    //output = new FileOutputStream(file);//, Context.MODE_PRIVATE);
-////                    output.write(content.getBytes());
-////                    output.close();
-////                } catch (IOException e) {
-////                    e.printStackTrace();
-////                }
-//                ///////////////////////////////////////////////////////////////////////////////
-//                if(output == null) {
+                ///////////////////////////////////////////////////////////////////////////////
+                if(output == null) {
 //            try {
-//                output = openFileOutput("axz", Context.MODE_PRIVATE);
+//                output = openFileOutput(""+firstletter, Context.MODE_PRIVATE);
 //                ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
 //                objectOutputStream.writeObject(newHash);
 //                objectOutputStream.close();
 //            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
-//        }
+        }
+                try {
+                    output = openFileOutput(""+firstletter, Context.MODE_PRIVATE);
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
+                    objectOutputStream.writeObject(newHash);
+                    objectOutputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 Intent main = new Intent(Installation_Activity.this, MainActivity.class);
                 startActivity(main);
             }
         }).start();
+
+            editor.putString("install","done");
+            editor.apply();}
+        else{Intent main = new Intent(Installation_Activity.this, MainActivity.class);
+            startActivity(main);}
+
 
 
 
