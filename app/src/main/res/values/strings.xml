@@ -14,10 +14,11 @@
     <string name="hint">You can start to look up words while indexing</string>
     <string name="shapeofyou">Song: Shape Of You --- Ed Sheeran</string>
 
-    <string name="AcknowledgementsSong">
-        Sounds: Beep Sound : Adapt from soundbible.com\n
-                  License: Attribution 3.0 | Recorded by Mastercard | File Size: 21 KB\n
-                  http://soundbible.com/1806-Censored-Beep.html\n
-           Song: Shape of You -- by Ed Sheeran\n
-                 From Album-Shape of You</string>
+    <string name="SOUND">SOUND:</string>
+    <string name="soundDescrip"> -----Beep Sound : Adapt from soundbible.com.| License: Attribution 3.0 | Recorded by Mastercard | File Size: 21 KB\n
+        -----http://soundbible.com/1806-Censored-Beep.html\n</string>
+    <string name="SONG">SONG:</string>
+    <string name="songDescrip"> -----Shape of You -- by Ed Sheeran From Album: Shape of You</string>
+
+
 </resources>

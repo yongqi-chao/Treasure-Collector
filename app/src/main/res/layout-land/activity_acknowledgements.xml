@@ -11,11 +11,35 @@
     tools:context="edu.neu.madcourse.yongqichao.Acknowledgements">
 
     <TextView
-        android:text="@string/AcknowledgementsSong"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/Acknowledgements_Songs" />
+        android:id="@+id/SOUND"
+        android:text="@string/SOUND" />
+
+    <TextView
+        android:text="@string/soundDescrip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SOUND"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/soundDescription" />
+
+    <TextView
+        android:text="@string/SONG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/soundDescription"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/SONG" />
+
+    <TextView
+        android:text="@string/songDescrip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SONG"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/songDescription" />
 </RelativeLayout>

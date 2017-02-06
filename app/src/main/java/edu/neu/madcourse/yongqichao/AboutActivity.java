@@ -18,13 +18,9 @@ import android.widget.TextView;
 public class AboutActivity extends AppCompatActivity {
 
     Button backButton;
-    TextView aboutText;
-    ImageView aboutImage;
-
 
     private static final int DEV_ID_PERMISSION = 1;
     private static final int PHOTO_PERMISSION = 15;
-
     private static final String TAG = "DisplayMessageActivity";
 
 
@@ -33,7 +29,6 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         setTitle("Yongqi Chao");
-
 
         //add Back button
         backButton = (Button) findViewById(R.id.back);
@@ -45,12 +40,7 @@ public class AboutActivity extends AppCompatActivity {
         });
 
 
-
-
-        Log.i(TAG, "Creating the Activity now");
-
-
-        ViewGroup layout = (ViewGroup) findViewById(R.id.activity_about);
+        //Display IMEI
         TextView imeiTV = (TextView) findViewById(R.id.imei_textview);
         imeiTV.setTextSize(20);
 
@@ -69,12 +59,12 @@ public class AboutActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.READ_PHONE_STATE},
                     DEV_ID_PERMISSION);
         }
-
-
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA},
                 PHOTO_PERMISSION);
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -105,7 +95,6 @@ public class AboutActivity extends AppCompatActivity {
             case PHOTO_PERMISSION: {
                 Log.i(TAG, "Some code that isn't used. ");
             }
-
             // other 'case' lines to check for other
             // permissions this app might request
         }
