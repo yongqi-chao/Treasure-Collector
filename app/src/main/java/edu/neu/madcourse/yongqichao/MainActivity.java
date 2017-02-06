@@ -71,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
         if(!name.equalsIgnoreCase("done")) {
             Intent install = new Intent(MainActivity.this, Installation_Activity.class);
             startActivity(install);
-            editor.putString("installation","done");
-            editor.apply();
         }
 
 

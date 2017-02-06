@@ -2,9 +2,11 @@ package edu.neu.madcourse.yongqichao;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -41,6 +43,10 @@ public class Installation_Activity extends Activity {
 
         installText = (TextView) findViewById(R.id.installText);
         installText.setText("installing dictionary component");
+
+        //Use shared preference to tell phone whether it installed dictionary component
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = preferences.edit();
 
         //read wordlist text file from raw
         text = new Scanner(getResources().openRawResource(R.raw.wordlist));
@@ -97,6 +103,9 @@ public class Installation_Activity extends Activity {
                     e.printStackTrace();
                 }
                 song.stop();
+                //tell the phone that it installed this dictionary component.
+                editor.putString("installation","done");
+                editor.apply();
                 finish();
             }
         }).start();
