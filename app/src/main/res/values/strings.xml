@@ -11,6 +11,6 @@
     <string name="returnButton">Return to Menu</string>
     <string name="clearButton">Clear</string>
     <string name="acknoledgements">Acknowledgment</string>
-
+    <string name="hint">You can start to look up words while indexing</string>
 
 </resources>
