@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Yongqi Chao");
 
 
+
         background = (RelativeLayout) findViewById(R.id.activity_main);
 
 
@@ -136,12 +138,11 @@ public class MainActivity extends AppCompatActivity {
 
         // SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences.getString("installation", "not finish");
-        if(name.equalsIgnoreCase("not finish")) {
+        if(!name.equalsIgnoreCase("done")) {
             Intent install = new Intent(MainActivity.this, Installation_Activity.class);
             startActivity(install);
             editor.putString("installation","done");
             editor.apply();
-
         }
 
 

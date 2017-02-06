@@ -43,10 +43,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Timer;
 
-import static java.lang.System.out;
-
 public class DictionaryActivity extends AppCompatActivity {
-    Button returnButton, clearButton;
+    Button returnButton, clearButton, acknowledgementButton;
     AutoCompleteTextView enterText;
     ListView listofword;
     FileInputStream inputStream;
@@ -94,6 +92,7 @@ public class DictionaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
         setTitle("Test Dictionary");
+
 
 
         diconaryLoadingInfo = (TextView) findViewById(R.id.dictionaryLoadingInfo);
@@ -354,7 +353,15 @@ public class DictionaryActivity extends AppCompatActivity {
 
 
 
-
+        //acknowledgements
+        acknowledgementButton = (Button) findViewById(R.id.acknowledgment);
+        acknowledgementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent acknowledgement = new Intent(DictionaryActivity.this, Acknowledgements.class);
+                startActivity(acknowledgement);;
+            }
+        });
 
 
 

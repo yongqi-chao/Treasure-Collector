@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -59,10 +60,13 @@ public class Installation_Activity extends Activity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setMax(480000);
         progressBar.setScaleY(6f);
+        final MediaPlayer song = MediaPlayer.create(this, R.raw.shapeofyou);
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+                song.start();
                 firstletter = 'a';
                 while (text.hasNext()){
                     mProgressStatus += 1;
@@ -146,6 +150,7 @@ public class Installation_Activity extends Activity {
 
 //                Intent main = new Intent(Installation_Activity.this, MainActivity.class);
 //                startActivity(main);
+                song.stop();
                 finish();
             }
         }).start();
