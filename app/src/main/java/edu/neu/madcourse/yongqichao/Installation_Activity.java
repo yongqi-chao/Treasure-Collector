@@ -60,13 +60,6 @@ public class Installation_Activity extends Activity {
         progressBar.setMax(480000);
         progressBar.setScaleY(6f);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putString("install","123");
-//        editor.apply();
-
-        String name = preferences.getString("install", "123");
-        if(name.equalsIgnoreCase("123")) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -151,15 +144,13 @@ public class Installation_Activity extends Activity {
                     e.printStackTrace();
                 }
 
-                Intent main = new Intent(Installation_Activity.this, MainActivity.class);
-                startActivity(main);
+//                Intent main = new Intent(Installation_Activity.this, MainActivity.class);
+//                startActivity(main);
+                finish();
             }
         }).start();
 
-            editor.putString("install","done");
-            editor.apply();}
-        else{Intent main = new Intent(Installation_Activity.this, MainActivity.class);
-            startActivity(main);}
+
 
 
 

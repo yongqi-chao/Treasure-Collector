@@ -42,4 +42,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/introduction"
+        android:layout_alignLeft="@+id/introduction"
+        android:layout_alignStart="@+id/introduction"
+        android:id="@+id/imei_textview" />
 </RelativeLayout>

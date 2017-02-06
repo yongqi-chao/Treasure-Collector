@@ -10,40 +10,79 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.neu.madcourse.yongqichao.DictionaryActivity">
 
-    <EditText
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text=""
-        android:ems="10"
-        android:id="@+id/editText"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="@string/returnButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/returnButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="@string/acknoledgements"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/acknowledgment"
-        android:layout_above="@+id/returnButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp" />
+        android:id="@+id/dictionaryLoadingInfo" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dictionaryLoadingInfo"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/progressBar2" />
+
+    <AutoCompleteTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/autoCompleteTextView"
+        android:layout_toStartOf="@+id/acknowledgment"
+        android:layout_toLeftOf="@+id/acknowledgment" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/autoCompleteTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/autoCompleteTextView"
+        android:layout_alignEnd="@+id/autoCompleteTextView"
+        android:id="@+id/listofw" />
+
+    <TextView
+        android:text="@string/hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/hint"
+        android:layout_toRightOf="@+id/autoCompleteTextView"
+        android:layout_toEndOf="@+id/autoCompleteTextView" />
 
     <Button
         android:text="@string/clearButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/clearButton"
-        android:layout_above="@+id/acknowledgment"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp" />
+        android:layout_below="@+id/hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="@string/acknoledgements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/acknowledgment"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="@string/returnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/returnButton"
+        android:layout_below="@+id/acknowledgment"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/listofw"
+        android:layout_toEndOf="@+id/listofw" />
 
 </RelativeLayout>

@@ -10,26 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.neu.madcourse.yongqichao.DictionaryActivity">
 
-    <Button
-        android:text="@string/acknoledgements"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/acknowledgment"
-        android:layout_marginTop="109dp"
-        android:layout_below="@+id/returnButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="@string/returnButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="105dp"
-        android:id="@+id/returnButton"
-        android:layout_below="@+id/clearButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <AutoCompleteTextView
         android:text=""
         android:layout_width="wrap_content"
@@ -48,21 +28,12 @@
         android:layout_toLeftOf="@+id/acknowledgment"
         android:layout_toStartOf="@+id/acknowledgment" />
 
-    <Button
-        android:text="@string/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/clearButton"
-        android:layout_below="@+id/progressBar2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <TextView
-        android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:id="@+id/dictionaryLoadingInfo"
+        android:layout_toStartOf="@+id/clearButton"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -72,6 +43,49 @@
         android:layout_height="30dp"
         android:id="@+id/progressBar2"
         android:layout_below="@+id/dictionaryLoadingInfo"
-        android:layout_centerHorizontal="true" />
+        android:layout_toStartOf="@+id/clearButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="@string/hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar2"
+        android:layout_toRightOf="@+id/autoCompleteTextView"
+        android:id="@+id/hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"/>
+
+    <Button
+        android:text="@string/acknoledgements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/acknowledgment"
+        android:layout_below="@+id/returnButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="64dp" />
+
+    <Button
+        android:text="@string/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/clearButton"
+        android:layout_below="@+id/hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp" />
+
+    <Button
+        android:text="@string/returnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/returnButton"
+        android:layout_below="@+id/clearButton"
+        android:layout_alignRight="@+id/clearButton"
+        android:layout_alignEnd="@+id/clearButton" />
 
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -79,7 +80,7 @@ public class DictionaryActivity extends AppCompatActivity {
     public HashMap<String,String> newHash= new HashMap<>();
 
     public ProgressBar progressBar;
-    TextView diconaryLoadingInfo;
+    TextView diconaryLoadingInfo, hint;
     public char firstletter;
     public String ss;
     public Scanner text;
@@ -96,7 +97,8 @@ public class DictionaryActivity extends AppCompatActivity {
 
 
         diconaryLoadingInfo = (TextView) findViewById(R.id.dictionaryLoadingInfo);
-        diconaryLoadingInfo.setText("installing dictionary component");
+        diconaryLoadingInfo.setText("Indexing dictionary");
+        hint = (TextView) findViewById(R.id.hint);
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         progressBar.setMax(26);
         progressBar.setScaleY(6f);
@@ -132,18 +134,19 @@ public class DictionaryActivity extends AppCompatActivity {
                             if(mProgressStatus < 25) {
                                 progressBar.setProgress(mProgressStatus);
                                 //diconaryLoadingInfo.setText("loading dictionary component:" + mProgressStatus + "/26");
-                                String info = "loading dictionary component:" + mProgressStatus + "/26"
-                                        + ":abcdefghijklmnopqrstuvwxyz";
+                                String info = "Indexing dictionary:" + mProgressStatus + "/26" + "\n"
+                                        + "abcdefghijklmnopqrstuvwxyz";
                                 Spannable spannable = new SpannableString(info);
 
-                                spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 34, mProgressStatus + 34, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                spannable.setSpan(new ForegroundColorSpan(Color.RED), mProgressStatus + 34, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 25, mProgressStatus + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                spannable.setSpan(new ForegroundColorSpan(Color.RED), mProgressStatus + 25, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                                 diconaryLoadingInfo.setText(spannable, TextView.BufferType.SPANNABLE);
                             }
                             else{
                                 progressBar.setVisibility(View.GONE);
-                                diconaryLoadingInfo.setText("loading dictionary component: FINISHED");
+                                diconaryLoadingInfo.setText("Indexing dictionary: FINISHED");
+                                hint.setText("");
                             }
                         }
                     });
@@ -268,7 +271,8 @@ public class DictionaryActivity extends AppCompatActivity {
 
         //a way of entering text
         enterText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        final ArrayList<String> source = new ArrayList<>();
+        //final ArrayList<String> source = new ArrayList<>();
+        final MediaPlayer clickSound = MediaPlayer.create(this, R.raw.beep);
 
         enterText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -289,29 +293,33 @@ public class DictionaryActivity extends AppCompatActivity {
                             && (newHash.containsKey(s.toString()) )){// || b.isWord(s.toString()) || q.isWord(s.toString()) || z.isWord(s.toString())) ){
                     System.out.println(s.toString());
 
-                    source.clear();
+                    //source.clear();
 
-                    source.add(s.toString());  }  }
-                System.out.println("3rd");
+                    //source.add(s.toString());  }  }
+                //System.out.println("3rd");
 
-                if(!source.isEmpty()) {
-                    ArrayAdapter<String> enterTextAdapter = new ArrayAdapter<>(DictionaryActivity.this,
-                            android.R.layout.simple_dropdown_item_1line, source);
-                    enterText.setAdapter(enterTextAdapter);
-                    System.out.println("sdasd");
-                    enterText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            String item = source.get(position);
-                            System.out.println(item);
-                            list.add(item);
-                            System.out.println("4rd");
+                //if(!source.isEmpty()) {
+                    //ArrayAdapter<String> enterTextAdapter = new ArrayAdapter<>(DictionaryActivity.this,
+                      //      android.R.layout.simple_dropdown_item_1line, source);
+                    //enterText.setAdapter(enterTextAdapter);
+                    //System.out.println("sdasd");
+                    //enterText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        //@Override
+                        //public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            //String item = source.get(position);
+                            //System.out.println(item);
+
+                        if(!list.contains(s.toString())) {
+                            list.add(s.toString());
+                            clickSound.start();
+                        }
+                          //  System.out.println("4rd");
 //                            //source.remove(item);
 //                            adapter = new MyAdapter(getActivity(),LocationList);
 //                            list.setAdapter(adapter);
 
                         }
-                    });
+                    //});
                 }
             }
 
@@ -324,6 +332,17 @@ public class DictionaryActivity extends AppCompatActivity {
         });
 
 
+        //add CLEAR button
+        clearButton = (Button) findViewById(R.id.clearButton);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enterText.setText("");
+                list.clear();
+
+
+            }
+        });
 
 
         //listview of list of words
@@ -337,14 +356,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
 
 
-        //add CLEAR button
-        clearButton = (Button) findViewById(R.id.clearButton);
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enterText.setText("");
-            }
-        });
+
 
         //add RETURN button
         returnButton = (Button) findViewById(R.id.returnButton);

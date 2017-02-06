@@ -130,103 +130,20 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("low","123");
-        editor.apply();
+
 
         Map<String,String> newHash= new HashMap<>();
 
         // SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String name = preferences.getString("low", "first");
-        if(name.equalsIgnoreCase("13")) {
-            //name = name + "  Sethi";  /* Edit the value here*/
-
-            //n.addString("startyeah");
-
-            Scanner text = new Scanner(getResources().openRawResource(R.raw.wordlist));
-
-            char firstletter;
-            String ss;
-            try {
-                while (text.hasNext()){ //for (int aint = 0; aint< 100; aint++){// (s.hasNext()) {
-                    ss = text.next();
-                    firstletter = ss.charAt(0);
-                    if(firstletter == 'a'){
-                        newHash.put(ss,ss);}
-//                    if(firstletter == 'a'){
-//                        a.addString(ss);}
-//                    if(firstletter == 'b'){
-//                        b.addString(ss);}
-//                    if(firstletter == 'c'){
-//                        c.addString(ss);}
-//                    if(firstletter == 'd'){
-//                        d.addString(ss);}
-//                    if(firstletter == 'e'){
-//                        e.addString(ss);}
-//                    if(firstletter == 'f'){
-//                        f.addString(ss);}
-//                    if(firstletter == 'g'){
-//                        g.addString(ss);}
-//                    if(firstletter == 'h'){
-//                        h.addString(ss);}
-//                    if(firstletter == 'i'){
-//                        i.addString(ss);}
-//                    if(firstletter == 'j'){
-//                        j.addString(ss);}
-//                    if(firstletter == 'k'){
-//                        k.addString(ss);}
-//                    if(firstletter == 'l'){
-//                        l.addString(ss);}
-//                    if(firstletter == 'm'){
-//                        m.addString(ss);}
-//                    if(firstletter == 'n'){
-//                        n.addString(ss);}
-//                    if(firstletter == 'o'){
-//                        o.addString(ss);}
-//                    if(firstletter == 'p'){
-//                        p.addString(ss);}
-//                    if(firstletter == 'q'){
-//                        q.addString(ss);}
-//                    if(firstletter == 'r'){
-//                        r.addString(ss);}
-//                    if(firstletter == 's'){
-//                        s.addString(ss);}
-//                    if(firstletter == 't'){
-//                        t.addString(ss);}
-//                    if(firstletter == 'u'){
-//                        u.addString(ss);}
-//                    if(firstletter == 'v'){
-//                        v.addString(ss);}
-//                    if(firstletter == 'w'){
-//                        w.addString(ss);}
-//                    if(firstletter == 'x'){
-//                        x.addString(ss);}
-//                    if(firstletter == 'y'){
-//                        y.addString(ss);}
-//                    if(firstletter == 'z'){
-//                        z.addString(ss);}
-
-                }
-
-            } catch (Exception e) {
-                out.println("I caught: " + e);
-            }
-
-            text.close();
-//
-//        SharedPreferences prefs = this.getSharedPreferences(
-//                "com.example.app", Context.MODE_PRIVATE);
-//            try {
-//                JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
-//                String json=writer.(n);
-//
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
+        String name = preferences.getString("installation", "not finish");
+        if(name.equalsIgnoreCase("not finish")) {
+            Intent install = new Intent(MainActivity.this, Installation_Activity.class);
+            startActivity(install);
+            editor.putString("installation","done");
+            editor.apply();
 
         }
+
 
 
         //Gson gson= new Gson();
@@ -331,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
 //                e.printStackTrace();
 //            }
 //        }
-        System.out.println("MyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFileMyFile: ");
 
 
     }
