@@ -26,6 +26,7 @@ public class Installation_Activity extends Activity {
     public String word;
     public Scanner text;
     public HashSet<String> newHash= new HashSet<>();
+    Thread thread;
 
     public File file;
     public FileOutputStream output = null;
@@ -58,7 +59,7 @@ public class Installation_Activity extends Activity {
         final MediaPlayer song = MediaPlayer.create(this, R.raw.shapeofyou);
 
         //convert words from text file to hashmap and save into internal storage
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 song.start();
@@ -108,6 +109,7 @@ public class Installation_Activity extends Activity {
                 editor.apply();
                 finish();
             }
-        }).start();
+        });
+        thread.start();
     }
 }
