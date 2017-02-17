@@ -37,15 +37,25 @@
         android:layout_below="@+id/error"
         android:layout_alignLeft="@+id/error"
         android:layout_alignStart="@+id/error"
-        android:layout_marginTop="42dp" />
+        android:layout_marginTop="27dp" />
+
+    <Button
+        android:text="@string/wordgameButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/wordgame"
+        android:layout_below="@+id/dictionary"
+        android:layout_alignLeft="@+id/dictionary"
+        android:layout_alignStart="@+id/dictionary"
+        android:layout_marginTop="32dp" />
 
     <Button
         android:text="@string/quitButton"
         android:layout_height="wrap_content"
         android:id="@+id/quit"
-        android:layout_marginTop="34dp"
         android:layout_width="150dp"
-        android:layout_below="@+id/dictionary"
-        android:layout_alignLeft="@+id/dictionary"
-        android:layout_alignStart="@+id/dictionary" />
+        android:layout_below="@+id/wordgame"
+        android:layout_alignLeft="@+id/wordgame"
+        android:layout_alignStart="@+id/wordgame"
+        android:layout_marginTop="28dp" />
 </RelativeLayout>

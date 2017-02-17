@@ -1,9 +1,7 @@
 package edu.neu.madcourse.yongqichao;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +12,7 @@ import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity {
     RelativeLayout background;
-    Button errorButton, aboutButton, dictionaryButton, quitButton;
+    Button errorButton, aboutButton, dictionaryButton, wordgameButton, quitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent dictionary = new Intent(MainActivity.this, DictionaryActivity.class);
                 startActivity(dictionary);
+            }
+        });
+
+        //add Word Game button
+        wordgameButton = (Button) findViewById(R.id.wordgame);
+        wordgameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent wordgame = new Intent(MainActivity.this, WordgameActivity.class);
+                startActivity(wordgame);
             }
         });
 
