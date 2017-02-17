@@ -15,6 +15,7 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -45,7 +46,11 @@ public class DictionaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
         setTitle("Test Dictionary");
-        
+
+        //dismiss keyboard at the start
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         //read words from raw file wordlist.txt
         InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
         BufferedReader r = new BufferedReader(input);
