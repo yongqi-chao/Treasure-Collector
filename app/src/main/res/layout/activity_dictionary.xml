@@ -28,36 +28,6 @@
         android:layout_toLeftOf="@+id/acknowledgment"
         android:layout_toStartOf="@+id/acknowledgment" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:id="@+id/dictionaryLoadingInfo"
-        android:layout_toStartOf="@+id/clearButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:id="@+id/progressBar2"
-        android:layout_below="@+id/dictionaryLoadingInfo"
-        android:layout_toStartOf="@+id/clearButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:text="@string/hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/progressBar2"
-        android:layout_toRightOf="@+id/autoCompleteTextView"
-        android:id="@+id/hint"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="20dp"/>
-
     <Button
         android:text="@string/acknoledgements"
         android:layout_width="wrap_content"

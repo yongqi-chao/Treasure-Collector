@@ -62,18 +62,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //check does app install dictionary component?
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        String name = preferences.getString("installation", "not finish");
-
-        //if not, then install it.
-        if(!name.equalsIgnoreCase("done")) {
-            Intent install = new Intent(MainActivity.this, Installation_Activity.class);
-            startActivity(install);
-        }
-
-
 
     }
 }

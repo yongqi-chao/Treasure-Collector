@@ -22,7 +22,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -57,47 +60,20 @@ public class DictionaryActivity extends AppCompatActivity {
         progressBar.setMax(26);
         progressBar.setScaleY(6f);
 
-        //read pre-saved hashmap(world list) from internal storage.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                firstletter = 'a';
-                for (;mProgressStatus <= 26 ; mProgressStatus ++){
-                    //loading hashmap
-                    try {
-                        inputStream = openFileInput("" + firstletter);
-                        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                        HashSet<String> adder = (HashSet<String>) objectInputStream.readObject();
-                        newHash.addAll(adder);
-                        objectInputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();}
-                    firstletter++;
 
-                    //show loading progress on screen
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(mProgressStatus < 25) {
-                                progressBar.setProgress(mProgressStatus);
-                                String info = "Indexing dictionary:" + mProgressStatus + "/26" + "\n" + "abcdefghijklmnopqrstuvwxyz";
-                                Spannable spannable = new SpannableString(info);
-                                spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 25,
-                                        mProgressStatus + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                spannable.setSpan(new ForegroundColorSpan(Color.RED),
-                                        mProgressStatus + 25, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                diconaryLoadingInfo.setText(spannable, TextView.BufferType.SPANNABLE);
-                            }
-                            else{
-                                progressBar.setVisibility(View.GONE);
-                                diconaryLoadingInfo.setText("Indexing dictionary: FINISHED");
-                                hint.setText("");
-                            }
-                        }
-                    });
-                }
+        //read words from raw file wordlist.txt
+        InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
+        BufferedReader r = new BufferedReader(input);
+        String word;
+
+        //convert word to hashset
+        try {
+            while ((word = r.readLine()) != null){
+                newHash.add(word);
             }
-        }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         //a way of displaying a list of words.
