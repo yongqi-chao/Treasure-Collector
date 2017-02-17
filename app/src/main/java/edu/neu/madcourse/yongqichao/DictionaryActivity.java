@@ -36,15 +36,8 @@ public class DictionaryActivity extends AppCompatActivity {
     Button returnButton, clearButton, acknowledgementButton;
     AutoCompleteTextView enterText;
     ListView listofword;
-    FileInputStream inputStream;
 
     public HashSet<String> newHash= new HashSet<>();
-
-    public ProgressBar progressBar;
-    TextView diconaryLoadingInfo, hint;
-    public char firstletter;
-    private int mProgressStatus = 1;
-    private Handler mHandler = new Handler();
 
 
     @Override
@@ -52,15 +45,7 @@ public class DictionaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
         setTitle("Test Dictionary");
-
-        diconaryLoadingInfo = (TextView) findViewById(R.id.dictionaryLoadingInfo);
-        diconaryLoadingInfo.setText("Indexing dictionary");
-        hint = (TextView) findViewById(R.id.hint);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar2);
-        progressBar.setMax(26);
-        progressBar.setScaleY(6f);
-
-
+        
         //read words from raw file wordlist.txt
         InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
         BufferedReader r = new BufferedReader(input);
