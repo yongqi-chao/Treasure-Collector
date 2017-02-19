@@ -21,7 +21,13 @@
         <activity android:name=".AboutActivity" />
         <activity android:name=".DictionaryActivity" />
         <activity android:name=".Acknowledgements" />
-        <activity android:name=".WordgameActivity"></activity>
+        <activity android:name=".WordgameActivity" />
+        <activity android:name=".WordgameFragment" />
+        <activity android:name=".WordgamePlay" />
+        <activity android:name=".WordgamePlayFragment" />
+        <activity android:name=".WordgamePlayController" />
+        <activity android:name=".WordgameControlFragment" />
+        <activity android:name=".WordgameTile"></activity>
     </application>
 
 </manifest>

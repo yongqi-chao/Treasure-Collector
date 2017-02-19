@@ -21,5 +21,26 @@
     <string name="SONG">SONG:</string>
     <string name="songDescrip"> -----Shape of You -- by Ed Sheeran From Album: Shape of You</string>
 
+    <!--this part is for word game-->
 
+    <string name="app_name_wordgame">UT3</string>
+    <string name="long_app_name_wordgame">Ultimate Tic Tac Toe</string>
+    <string name="action_settings_wordgame">Settings</string>
+    <string name="restart_label_wordgame">Restart</string>
+    <string name="main_menu_label_wordgame">Main Menu</string>
+    <string name="declare_winner_wordgame">%1$s is the winner</string>
+    <string name="continue_label_wordgame">Continue</string>
+    <string name="new_game_label_wordgame">New Game</string>
+    <string name="about_title_wordgame">About Ultimate Tic Tac Toe</string>
+    <string name="about_label_wordgame">About</string>
+    <string name="ok_label_wordgame">OK</string>
+    <string name="about_text_wordgame">\
+        This game is played just like
+regular Tic Tac Toe with one difference: to win a tile
+you have to win a smaller game of Tic Tac Toe inside that tile.\n\
+\n\
+A tie happens when there are no further moves.
+In the case of a tie in a small board, that will count as a win for
+both sides in the larger game.
+</string>
 </resources>
