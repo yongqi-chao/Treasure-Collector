@@ -179,7 +179,7 @@ public class DictionaryActivity extends AppCompatActivity {
         String dictionaryData = parseToString(list);
         getPreferences(MODE_PRIVATE).edit()
                 .putString(Dictionary_RESTORE, dictionaryData)
-                .commit();
+                .apply();
     }
 
 }
