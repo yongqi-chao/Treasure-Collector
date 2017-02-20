@@ -10,12 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+
 public class WordgamePlay extends AppCompatActivity {
     public static final String KEY_RESTORE = "key_restore";
     public static final String PREF_RESTORE = "pref_restore";
     private MediaPlayer mMediaPlayer;
     private Handler mHandler = new Handler();
     private WordgamePlayFragment gameFragment;
+
+    private HashSet<String> dictionary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,28 @@ public class WordgamePlay extends AppCompatActivity {
             }
         }
         Log.d("Wordgame", "restore = " + restore);
+
+
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
+                        BufferedReader r = new BufferedReader(input);
+                        String word;
+                        //convert word to hashset
+                        try {
+                            while ((word = r.readLine()) != null){
+                                if(word.length() == 9) dictionary.add(word);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).start();
+
+
     }
 
     public void restartGame() {

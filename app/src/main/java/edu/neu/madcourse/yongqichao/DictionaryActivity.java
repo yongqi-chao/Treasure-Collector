@@ -14,6 +14,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -37,8 +38,11 @@ public class DictionaryActivity extends AppCompatActivity {
     Button returnButton, clearButton, acknowledgementButton;
     AutoCompleteTextView enterText;
     ListView listofword;
+    public static final String Dictionary_RESTORE = "Dictionary_restore";
 
     public HashSet<String> newHash= new HashSet<>();
+    private ArrayList<String> list = new ArrayList<>();
+
 
 
     @Override
@@ -46,6 +50,11 @@ public class DictionaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
         setTitle("Test Dictionary");
+
+        String dictionaryData = getPreferences(MODE_PRIVATE).getString(Dictionary_RESTORE, null);
+        if (dictionaryData != null) {
+            list = parseToList(dictionaryData);
+        }
 
         //dismiss keyboard at the start
         getWindow().setSoftInputMode(
@@ -74,7 +83,6 @@ public class DictionaryActivity extends AppCompatActivity {
 
         //a way of displaying a list of words.
         listofword = (ListView) findViewById(R.id.listofw);
-        final ArrayList<String> list = new ArrayList<>();
 
         //a way of entering text
         enterText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
@@ -141,6 +149,37 @@ public class DictionaryActivity extends AppCompatActivity {
     //return true iff the input string does not contain capital character
     public boolean isAlpha(String name) {
         return name.matches("[a-z]+");
+    }
+
+
+    public ArrayList<String> parseToList(String dictionaryData){
+        String[] fields = dictionaryData.split(",");
+        ArrayList<String> listofwords = new ArrayList<>();
+        for (int index = 0; index < fields.length; index++) {
+            listofwords.add(fields[index]);
+        }
+        return  listofwords;
+    }
+
+
+    public String parseToString(ArrayList<String> listofwords){
+        StringBuilder builder = new StringBuilder();
+        for (int index = 0; index < listofwords.size(); index++) {
+            builder.append(listofwords.get(index));
+            builder.append(',');
+        }
+        return builder.toString();
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String dictionaryData = parseToString(list);
+        getPreferences(MODE_PRIVATE).edit()
+                .putString(Dictionary_RESTORE, dictionaryData)
+                .commit();
     }
 
 }
