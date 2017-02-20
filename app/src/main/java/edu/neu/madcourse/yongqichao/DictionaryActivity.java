@@ -52,18 +52,24 @@ public class DictionaryActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         //read words from raw file wordlist.txt
-        InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
-        BufferedReader r = new BufferedReader(input);
-        String word;
-
-        //convert word to hashset
-        try {
-            while ((word = r.readLine()) != null){
-                newHash.add(word);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
+                        BufferedReader r = new BufferedReader(input);
+                        String word;
+                        //convert word to hashset
+                        try {
+                            while ((word = r.readLine()) != null){
+                                newHash.add(word);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).start();
 
 
         //a way of displaying a list of words.

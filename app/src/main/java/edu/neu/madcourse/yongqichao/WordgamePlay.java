@@ -31,7 +31,7 @@ public class WordgamePlay extends AppCompatActivity {
                 gameFragment.putState(gameData);
             }
         }
-        Log.d("UT3", "restore = " + restore);
+        Log.d("Wordgame", "restore = " + restore);
     }
 
     public void restartGame() {

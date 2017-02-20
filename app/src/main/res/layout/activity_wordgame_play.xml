@@ -23,7 +23,7 @@ tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
         <fragment
             android:id="@+id/fragment_game"
             class="edu.neu.madcourse.yongqichao.WordgamePlayFragment"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:layout="@layout/activity_wordgame_play_fragment"/>
         <!-- Control fragment goes here... -->
