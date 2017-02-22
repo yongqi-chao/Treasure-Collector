@@ -20,6 +20,18 @@ tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
         android:orientation="vertical"
         android:weightSum="1">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_chronometer"
+            android:text="@string/textforchronometer"
+            android:textSize="20dp"/>
+
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chronometer" />
+
         <fragment
             android:id="@+id/fragment_game"
             class="edu.neu.madcourse.yongqichao.WordgamePlayFragment"

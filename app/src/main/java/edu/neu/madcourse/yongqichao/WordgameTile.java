@@ -2,9 +2,19 @@ package edu.neu.madcourse.yongqichao;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class WordgameTile {
 
@@ -23,6 +33,16 @@ public class WordgameTile {
     private Owner mOwner = Owner.NEITHER;
     private View mView;
     private WordgameTile mSubTiles[];
+
+
+    private Button smallTile;
+    private boolean matched;
+    private boolean selected;
+    public boolean lastSelected;
+    private boolean available;
+    private char aChar;
+    private ArrayList<WordgameTile> moveTrack = new ArrayList<>();
+    public int moveTrackingNumber;
 
     public WordgameTile(WordgamePlayFragment game) {
         this.mGame = game;
@@ -50,12 +70,53 @@ public class WordgameTile {
         this.mView = view;
     }
 
+    public void setButton(Button button){
+        this.smallTile = button;
+    }
+
     public Owner getOwner() {
         return mOwner;
     }
 
     public void setOwner(Owner owner) {
         this.mOwner = owner;
+    }
+
+    public void setSelected(boolean select){
+        if(matched) selected = false;
+        else selected = select;
+    }
+
+    public boolean getSelected(){
+        if(matched) return false;
+        return  selected;
+    }
+
+
+    public void setCharacter(char Char){
+        aChar = Char;
+    }
+
+    public char getCharacter(){
+       return aChar;
+    }
+
+    public boolean getAvailable(){
+        if(matched) return false;
+        return  available;
+    }
+
+    public void setAvailable(boolean availability){
+        if(matched) available = false;
+        else available = availability;
+    }
+
+    public boolean getMatched(){
+        return  matched;
+    }
+
+    public void setMatched(boolean match){
+        matched = match;
     }
 
     public WordgameTile[] getSubTiles() {
@@ -66,17 +127,50 @@ public class WordgameTile {
         this.mSubTiles = subTiles;
     }
 
+    public ArrayList<WordgameTile> getMoveTrack() {
+        return moveTrack;
+    }
+
+    public void setMoveTrack(ArrayList<WordgameTile> moveTrack) {
+        this.moveTrack = moveTrack;
+    }
+
+
+
+
     public void updateDrawableState() {
         if (mView == null) return;
         int level = getLevel();
         if (mView.getBackground() != null) {
             mView.getBackground().setLevel(level);
         }
-        if (mView instanceof ImageButton) {
-            Drawable drawable = ((ImageButton) mView).getDrawable();
-            drawable.setLevel(level);
-        }
     }
+
+    public void updateButtonState(){
+        if (smallTile == null) return;
+        if(smallTile.getBackground() == null) return;
+
+        if (matched){
+            smallTile.setBackgroundColor(Color.rgb(255,160,122));
+        }
+        else if (lastSelected){
+            smallTile.setBackgroundColor(Color.rgb(255,69,0));
+        }
+        else if (selected) {
+            smallTile.setBackgroundColor(Color.rgb(255,255,153));
+//            Drawable drawable = ((ImageButton) mView).getDrawable();
+//            drawable.setLevel(level);
+        }
+        else if (aChar != 0  && available){
+            smallTile.setBackgroundColor(Color.rgb(46,139,87));
+        }
+        else{
+            smallTile.setBackgroundColor(Color.GRAY);
+        }
+
+        smallTile.setText(String.valueOf(aChar));
+    }
+
 
     private int getLevel() {
         int level = LEVEL_BLANK;
@@ -91,7 +185,8 @@ public class WordgameTile {
                 level = LEVEL_TIE;
                 break;
             case NEITHER:
-                level = mGame.isAvailable(this) ? LEVEL_AVAILABLE : LEVEL_BLANK;
+               // level = mGame.isAvailable(this) ? LEVEL_AVAILABLE : LEVEL_BLANK;
+                level = available ? LEVEL_AVAILABLE : LEVEL_BLANK;
                 break;
         }
         return level;
