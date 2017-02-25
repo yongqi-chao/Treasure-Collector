@@ -34,15 +34,23 @@ public class WordgameTile {
     private View mView;
     private WordgameTile mSubTiles[];
 
-
+    //for small tiles only
     private Button smallTile;
     private boolean matched;
     private boolean selected;
     public boolean lastSelected;
     private boolean available;
     private char aChar;
+    public int positionNumber;
+
+    //for large tiles only
     private ArrayList<WordgameTile> moveTrack = new ArrayList<>();
-    public int moveTrackingNumber;
+    public boolean finished;
+
+    //for entire tile only
+    public ArrayList<WordgameTile> moveTrackPhase2 = new ArrayList<>();
+    public int largePositionNumber;
+
 
     public WordgameTile(WordgamePlayFragment game) {
         this.mGame = game;
@@ -95,6 +103,10 @@ public class WordgameTile {
 
     public void setCharacter(char Char){
         aChar = Char;
+    }
+
+    public void clearCharacter(){
+
     }
 
     public char getCharacter(){
@@ -150,20 +162,21 @@ public class WordgameTile {
         if (smallTile == null) return;
         if(smallTile.getBackground() == null) return;
 
+        //pink means it got a match
         if (matched){
             smallTile.setBackgroundColor(Color.rgb(255,160,122));
-        }
+        }//if not matched, set to red only if it is last selected
         else if (lastSelected){
             smallTile.setBackgroundColor(Color.rgb(255,69,0));
-        }
+        }//if not matched not last selected, set to yellow if it is selected
         else if (selected) {
             smallTile.setBackgroundColor(Color.rgb(255,255,153));
 //            Drawable drawable = ((ImageButton) mView).getDrawable();
 //            drawable.setLevel(level);
-        }
+        }//if not matched not selected, set it to green if it is available
         else if (aChar != 0  && available){
             smallTile.setBackgroundColor(Color.rgb(46,139,87));
-        }
+        }//if none of them, set to grey
         else{
             smallTile.setBackgroundColor(Color.GRAY);
         }
@@ -171,6 +184,19 @@ public class WordgameTile {
         smallTile.setText(String.valueOf(aChar));
     }
 
+
+    public boolean gotMatch(ArrayList<String> dictionary, ArrayList<WordgameTile> moveTrack){
+        if (dictionary.contains(trackToString(moveTrack))) return true;
+        return false;
+    }
+
+    public String trackToString(ArrayList<WordgameTile> moveTrack){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i=0;i < moveTrack.size() ;i++){
+            stringBuilder.append(moveTrack.get(i).getCharacter());
+        }
+        return stringBuilder.toString();
+    }
 
     private int getLevel() {
         int level = LEVEL_BLANK;

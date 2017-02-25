@@ -20,12 +20,34 @@ tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
         android:orientation="vertical"
         android:weightSum="1">
 
+
+        <Button
+            android:text="@string/selectItButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/selectIt"
+            android:visibility="gone" />
+
+        <Button
+            android:text="@string/startPhase2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/startPhase2"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/matchWordReporter"
+            android:textSize="20dp"/>
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView_chronometer"
             android:text="@string/textforchronometer"
-            android:textSize="20dp"/>
+            android:textSize="15dp"/>
 
         <Chronometer
             android:layout_width="wrap_content"
