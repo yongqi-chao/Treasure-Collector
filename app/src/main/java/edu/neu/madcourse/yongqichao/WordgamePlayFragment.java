@@ -1,11 +1,13 @@
 package edu.neu.madcourse.yongqichao;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class WordgamePlayFragment extends Fragment {
     static private int mLargeIds[] = {R.id.large1, R.id.large2, R.id.large3,
@@ -34,11 +38,9 @@ public class WordgamePlayFragment extends Fragment {
     private WordgameTile mEntireBoard = new WordgameTile(this);
     private WordgameTile mLargeTiles[] = new WordgameTile[9];
     private WordgameTile mSmallTiles[][] = new WordgameTile[9][9];
-    //    private WordgameTile.Owner mPlayer = WordgameTile.Owner.X;
-    private Set<WordgameTile> availableTiles = new HashSet<WordgameTile>();
-    //    private int mSoundX, mSoundO, mSoundMiss, mSoundRewind;
-//    private SoundPool mSoundPool;
-//    private float mVolume = 1f;
+    private int mSoundX;
+    private SoundPool mSoundPool;
+    private float mVolume = 1f;
     private int lastSelectedLarge;
     private int lastSelectedSmall;
 
@@ -51,6 +53,7 @@ public class WordgamePlayFragment extends Fragment {
     private boolean haveContinueGameData = false;
     private  ArrayList<int[]> tileAvailableList =new ArrayList<>();
     //activity_wordgame_play_fragment
+    public static final String Phase_RESTORE = "phase_restore";
     public WordgamePlay.Phase phase= WordgamePlay.Phase.Phase1;
 
     @Override
@@ -58,12 +61,16 @@ public class WordgamePlayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Retain this fragment across configuration changes.
         setRetainInstance(true);
+        String phaseData = this.getActivity().getPreferences(MODE_PRIVATE)
+                .getString(Phase_RESTORE, null);
+        if (phaseData != null) {
+            phase = WordgamePlay.Phase.valueOf(phaseData);
+        }
+
         initGame();
-//        mSoundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
-//        mSoundX = mSoundPool.load(getActivity(), R.raw.sergenious_movex, 1);
-//        mSoundO = mSoundPool.load(getActivity(), R.raw.sergenious_moveo, 1);
-//        mSoundMiss = mSoundPool.load(getActivity(), R.raw.erkanozan_miss, 1);
-//        mSoundRewind = mSoundPool.load(getActivity(), R.raw.joanne_rewind, 1);
+        mSoundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
+        mSoundX = mSoundPool.load(getActivity(), R.raw.sergenious_movex, 1);
+
     }
 
 
@@ -90,14 +97,10 @@ public class WordgamePlayFragment extends Fragment {
                 final int fLarge = large;
                 final int fSmall = small;
                 final WordgameTile smallTile = mSmallTiles[large][small];
-//                final MediaPlayer clickSound = MediaPlayer.create(this.getActivity(), R.raw.beep);
                 smallTile.setButton(inner);
-                // ...
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        smallTile.animate();
-                        // ...
                         if (smallTile.getAvailable() && (finishLoadingNineCharDictionary | haveContinueGameData)
                                 && finishLoadingDictionary) {
                             if(phase == WordgamePlay.Phase.Phase1){
@@ -105,12 +108,7 @@ public class WordgamePlayFragment extends Fragment {
                             }else if(phase == WordgamePlay.Phase.Phase2){
                                 makeMovePhase2(fLarge,fSmall);
                             }
-                            //((WordgamePlay)getActivity()).startThinking();
-//                            mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
-                            //think();
-                            // clickSound.start();
-                        } else {
-//                            mSoundPool.play(mSoundMiss, mVolume, mVolume, 1, 0, 1f);
+                            mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
                         }
                     }
                 });
@@ -125,11 +123,6 @@ public class WordgamePlayFragment extends Fragment {
         updateAllTiles();
     }
 
-    public void resumePhase2(){
-        phase = WordgamePlay.Phase.Phase2;
-        setAllAvailablePhase2();
-        updateAllTiles();
-    }
 
     public void makeMovePhase2(int large, int small){
         cancleLastSelect();
@@ -164,69 +157,6 @@ public class WordgamePlayFragment extends Fragment {
         }
     }
 
-
-    private void think() {
-
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (getActivity() == null) return;
-//                if (mEntireBoard.getOwner() == WordgameTile.Owner.NEITHER) {
-//                    int move[] = new int[2];
-//                    pickMove(move);
-//                    if (move[0] != -1 && move[1] != -1) {
-//                        switchTurns();
-////                        mSoundPool.play(mSoundO, mVolume, mVolume,
-////                                1, 0, 1f);
-//                        makeMove(move[0], move[1]);
-//                        switchTurns();
-//                    }
-//                }
-////                ((WordgamePlay) getActivity()).stopThinking();
-//            }
-//        }, 1000);
-    }
-
-//    private void pickMove(int move[]) {
-//        WordgameTile.Owner opponent = mPlayer == WordgameTile.Owner.X ? WordgameTile.Owner.O : WordgameTile
-//                .Owner.X;
-//        int bestLarge = -1;
-//        int bestSmall = -1;
-//        int bestValue = Integer.MAX_VALUE;
-//        for (int large = 0; large < 9; large++) {
-//            for (int small = 0; small < 9; small++) {
-//                WordgameTile smallTile = mSmallTiles[large][small];
-//                if (isAvailable(smallTile)) {
-//                    // Try the move and get the score
-//                    WordgameTile newBoard = mEntireBoard.deepCopy();
-//                    newBoard.getSubTiles()[large].getSubTiles()[small]
-//                            .setOwner(opponent);
-//                    int value = newBoard.evaluate();
-//                    Log.d("UT3",
-//                            "Moving to " + large + ", " + small + " gives value " +
-//                                    "" + value
-//                    );
-//                    if (value < bestValue) {
-//                        bestLarge = large;
-//                        bestSmall = small;
-//                        bestValue = value;
-//                    }
-//                }
-//            }
-//        }
-//        move[0] = bestLarge;
-//        move[1] = bestSmall;
-//        Log.d("UT3", "Best move is " + bestLarge + ", " + bestSmall);
-//    }
-
-//    private void switchTurns() {
-//        mPlayer = mPlayer == WordgameTile.Owner.X ? WordgameTile.Owner.O : WordgameTile
-//                .Owner.X;
-//    }
-
-
-
-
     private void switchSelect(WordgameTile smallTile) {
         boolean tileSelect = smallTile.getSelected() == true ? false: true;
         smallTile.setSelected(tileSelect);
@@ -238,8 +168,6 @@ public class WordgamePlayFragment extends Fragment {
             smallTile.lastSelected = false;
         }
     }
-
-
 
     private void makeMove(int large, int small) {
         cancleLastSelect();
@@ -272,20 +200,6 @@ public class WordgamePlayFragment extends Fragment {
         }else {
             ((WordgamePlay)getActivity()).reportMatchedWord(null, large);
         }
-
-
-//        WordgameTile.Owner oldWinner = largeTile.getOwner();
-//        WordgameTile.Owner winner = largeTile.findWinner();
-//        if (winner != oldWinner) {
-////            largeTile.animate();
-//            largeTile.setOwner(winner);
-//        }
-//        winner = mEntireBoard.findWinner();
-//        mEntireBoard.setOwner(winner);
-//        updateAllTiles();
-//        if (winner != WordgameTile.Owner.NEITHER) {
-//            ((WordgamePlay)getActivity()).reportWinner(winner);
-//        }
     }
 
     public void restartGame() {
@@ -318,17 +232,53 @@ public class WordgamePlayFragment extends Fragment {
                 mSmallTiles[large][small] = new WordgameTile(this);
                 mSmallTiles[large][small].positionNumber = small;
                 mSmallTiles[large][small].largePositionNumber = large;
+                mSmallTiles[large][small].setCharacter(' ');
             }
-            mLargeTiles[large].setSubTiles(mSmallTiles[large]);
-//            mLargeTiles[large].moveTrackingNumber = large;
         }
-        mEntireBoard.setSubTiles(mLargeTiles);
 
         // Set all tiles before game start
         lastSelectedLarge = -1;
         lastSelectedSmall = -1;
         initSmallTileAvailability();
-        setAvailableFromLastMove(lastSelectedLarge,lastSelectedSmall);
+        if (phase == WordgamePlay.Phase.Phase2) {
+            setAvailableFromLastMovePhase2(lastSelectedLarge, lastSelectedSmall);
+        } else {
+            setAvailableFromLastMove(lastSelectedLarge, lastSelectedSmall);
+        }
+    }
+
+    private void updateAllTiles() {
+        // mEntireBoard.updateDrawableState();
+        for (int large = 0; large < 9; large++) {
+            //mLargeTiles[large].updateDrawableState();
+            for (int small = 0; small < 9; small++) {
+                mSmallTiles[large][small].updateButtonState();
+            }
+        }
+    }
+
+    //THE FOLLOWING FUNCTION IS FOR FINISHING A TILE or The Game AFTER PRESSED SELECT IT BUTTON
+    //AND THE LARGE TILE HAVE A MATCHED WORD
+    //-------------------------------------------------------------------------------------------
+
+    public void finishATile(int largeTileNumber){
+        for (int small = 0; small < 9; small++) {
+            WordgameTile smallTile = mSmallTiles[largeTileNumber][small];
+            if(smallTile.getSelected()){
+                smallTile.setMatched(true);
+                smallTile.setAvailable(false);
+            }else {
+                smallTile.setCharacter(' ');
+                smallTile.setAvailable(false);
+            }
+        }
+        //finish a large tile ; lock it to avoid changes on it
+        WordgameTile largeTile = mLargeTiles[largeTileNumber];
+        largeTile.finished = true;
+        lastSelectedLarge = -1;
+        lastSelectedSmall = -1;
+        setAvailableFromLastMove(lastSelectedLarge, lastSelectedSmall);
+        updateAllTiles();
     }
 
     //finish entire board
@@ -383,41 +333,6 @@ public class WordgamePlayFragment extends Fragment {
         //update visual effect to users
         lastSelectedLarge = -1;
         lastSelectedSmall = -1;
-        updateAllTiles();
-    }
-
-
-    private void updateAllTiles() {
-        // mEntireBoard.updateDrawableState();
-        for (int large = 0; large < 9; large++) {
-            //mLargeTiles[large].updateDrawableState();
-            for (int small = 0; small < 9; small++) {
-                mSmallTiles[large][small].updateButtonState();
-            }
-        }
-    }
-
-    //THE FOLLOWING FUNCTION IS FOR FINISHING A TILE AFTER PRESSED SELECT IT BUTTON
-    //AND THE LARGE TILE HAVE A MATCHED WORD
-    //-------------------------------------------------------------------------------------------
-
-    public void finishATile(int largeTileNumber){
-        for (int small = 0; small < 9; small++) {
-            WordgameTile smallTile = mSmallTiles[largeTileNumber][small];
-            if(smallTile.getSelected()){
-                smallTile.setMatched(true);
-                smallTile.setAvailable(false);
-            }else {
-                smallTile.setCharacter(' ');
-                smallTile.setAvailable(false);
-            }
-        }
-        //finish a large tile ; lock it to avoid changes on it
-        WordgameTile largeTile = mLargeTiles[largeTileNumber];
-        largeTile.finished = true;
-        lastSelectedLarge = -1;
-        lastSelectedSmall = -1;
-        setAvailableFromLastMove(lastSelectedLarge, lastSelectedSmall);
         updateAllTiles();
     }
 
@@ -506,7 +421,11 @@ public class WordgamePlayFragment extends Fragment {
                 mSmallTiles[large][small].setAvailable(Boolean.parseBoolean((fields[index++])));
             }
         }
-        setAvailableFromLastMove(lastSelectedLarge,lastSelectedSmall);
+        if(phase == WordgamePlay.Phase.Phase2) {
+            setAvailableFromLastMovePhase2(lastSelectedLarge,lastSelectedSmall);
+        }else {
+            setAvailableFromLastMove(lastSelectedLarge, lastSelectedSmall);
+        }
         updateAllTiles();
     }
 
@@ -524,7 +443,6 @@ public class WordgamePlayFragment extends Fragment {
 
     public void putMoveTrack(String gameData) {
         String[] fields = gameData.split(";");
-        System.out.println("put move track error" + fields.length);
         for (int large = 0; large < 9 && large < fields.length; large++) {
             if(fields[large].length() > 0) {
                 String[] moveTrack = fields[large].split(",");
@@ -535,8 +453,6 @@ public class WordgamePlayFragment extends Fragment {
                 }
             }
         }
-        System.out.println("put move track error");
-        System.out.println("put move track error" + fields.length);
         if(fields.length == 10 && fields[fields.length-1].length() > 0) {
             String[] moveTrack = fields[fields.length-1].split(",");
             for (int small = 0; small < moveTrack.length; ) {
@@ -576,8 +492,15 @@ public class WordgamePlayFragment extends Fragment {
                                 rememberRandomNumber.add(value);
                                 String tileString = nineCharWordDictionary.get(value);
                                 //set char to tile
-                                for (int small = 0; small < 9; small++) {
-                                    mSmallTiles[large][small].setCharacter(tileString.charAt(small));
+                                int charPosition = 0;
+                                for (int small = 0; small < 3; small++) {
+                                    mSmallTiles[large][small].setCharacter(tileString.charAt(charPosition++));
+                                }
+                                for (int small = 5; small > 2; small--) {
+                                    mSmallTiles[large][small].setCharacter(tileString.charAt(charPosition++));
+                                }
+                                for (int small = 6; small < 9; small++) {
+                                    mSmallTiles[large][small].setCharacter(tileString.charAt(charPosition++));
                                 }
                             }
                             mHandler.post(new Runnable() {

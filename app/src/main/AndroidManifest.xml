@@ -3,6 +3,7 @@
     package="edu.neu.madcourse.yongqichao">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -21,7 +22,8 @@
         <activity android:name=".AboutActivity" />
         <activity android:name=".DictionaryActivity" />
         <activity android:name=".Acknowledgements" />
-        <activity android:name=".WordgameActivity" />
+        <activity android:name=".WordgameActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".WordgameFragment" />
         <activity android:name=".WordgamePlay"
             android:screenOrientation="portrait"/>

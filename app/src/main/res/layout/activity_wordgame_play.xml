@@ -15,7 +15,7 @@ tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
         android:weightSum="1">
@@ -33,13 +33,13 @@ tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/startPhase2"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/matchWordReporter"
-            android:textSize="20dp"/>
+            android:textSize="20sp"/>
 
 
         <TextView
@@ -47,7 +47,7 @@ tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
             android:layout_height="wrap_content"
             android:id="@+id/textView_chronometer"
             android:text="@string/textforchronometer"
-            android:textSize="15dp"/>
+            android:textSize="15sp"/>
 
         <Chronometer
             android:layout_width="wrap_content"
@@ -61,6 +61,14 @@ tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
             android:layout_height="wrap_content"
             tools:layout="@layout/activity_wordgame_play_fragment"/>
         <!-- Control fragment goes here... -->
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gameScore"
+            android:textSize="20sp"/>
+
 
         <fragment
             android:id="@+id/fragment_game_controls"

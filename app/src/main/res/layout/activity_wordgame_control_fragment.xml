@@ -3,10 +3,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/control_padding"
     tools:context="edu.neu.madcourse.yongqichao.WordgamePlay">
 
     <Button
@@ -22,6 +21,25 @@
         android:layout_height="wrap_content"
         android:src="@drawable/home"
         android:text="@string/main_menu_label_wordgame" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/PauseWordGame"
+        android:text="@string/pauseGame" />
+
+    <Button
+        android:text="@string/resumeGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ResumeWordGame"
+        android:visibility="gone" />
+
+    <Button
+        android:text="@string/hintwordgame"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/hintWordGame" />
 
 
 </LinearLayout>

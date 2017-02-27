@@ -2,11 +2,13 @@ package edu.neu.madcourse.yongqichao;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,12 +27,8 @@ import java.util.Random;
 
 public class WordgamePlay extends AppCompatActivity {
     public enum Phase {
-        Phase1, Phase2,PhaseTimeOut
+        Phase1, Phase2,PhaseTimeOut,GameFinish
     }
-
-    //
-    //  add LOADDING LOADDDING LOADDING TO THIS SCREEN  ADN HINT TO THIS SCREEN
-    //
 
     public static final String KEY_RESTORE = "key_restore";
     public static final String State_RESTORE = "state_restore";
@@ -38,24 +36,34 @@ public class WordgamePlay extends AppCompatActivity {
     public static final String MoveTrack_RESTORE = "moveTrack_restore";
     public static final String Timer_RESTORE = "timer_restore";
     public static final String Phase_RESTORE = "phase_restore";
-    private MediaPlayer mMediaPlayer;
+    public static final String Score_RESTORE = "score_restore";
+    public static final String GameProgress_RESTORE = "gameProgress_restore";
     private Handler mHandler = new Handler();
     private WordgamePlayFragment gameFragment;
 
     private ArrayList<String> nineCharWordDictionary = new ArrayList<>();
     private ArrayList<String> dictionary = new ArrayList<>();
     private Chronometer chronometer;
-    private TextView matchWordReporter;
+    private TextView matchWordReporter, gameScore;
     private Button selectIt,startPhase2Button;
     private Phase phase = Phase.Phase1;
     private long stoppedTime;
-    private Thread loadingNineCharThread;
-    private Thread loadingDictionaryThread;
+    private int score;
+    private int gameProgress;
+    Thread nineWordDictionary, mainDictionary;
+    private Vibrator v;
+    private MediaPlayer matchSound;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wordgame_play);
+        setTitle("Word Game");
+
+        v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        matchSound = MediaPlayer.create(this, R.raw.oldedgar_winner);
+
         //start loading game fregment
         gameFragment = (WordgamePlayFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_game);
@@ -69,6 +77,12 @@ public class WordgamePlay extends AppCompatActivity {
                     .getString(Phase_RESTORE, null);
             if (phaseData != null) {
                 phase = Phase.valueOf(phaseData);
+            }
+            //restore game score
+            String scoreData = getPreferences(MODE_PRIVATE)
+                    .getString(Score_RESTORE, null);
+            if (scoreData != null) {
+                score = Integer.parseInt(scoreData);
             }
             //restore game state
             String stateData = getPreferences(MODE_PRIVATE)
@@ -95,13 +109,18 @@ public class WordgamePlay extends AppCompatActivity {
                 long passedTime = Long.parseLong(timeData);
                 chronometer.setBase(SystemClock.elapsedRealtime()-passedTime);
             }
-        }
+            //restore game progress
+            String progressData = getPreferences(MODE_PRIVATE)
+                    .getString(GameProgress_RESTORE, null);
+            if (progressData != null) {
+                gameProgress = Integer.parseInt(progressData);
+            }
+        } else score = 0;
+        gameScore = (TextView) findViewById(R.id.gameScore);
+        gameScore.setText("Your Score is: " + score);
 
-        if(phase == Phase.Phase2) gameFragment.initPhase2();
         putNineCharDictionaryIntoFragment();
         putDictionaryIntoFragment();
-
-
 
         Log.d("Wordgame", "restore = " + restore);
 
@@ -119,11 +138,10 @@ public class WordgamePlay extends AppCompatActivity {
                 stoppedTime = passedTime;
                 startPhase2Button = (Button) findViewById(R.id.startPhase2);
                 startPhase2Button.setVisibility(View.GONE);
-                System.out.println(phase);
                 switch (phase) {
                     case Phase1:
                         // finish phase 1 and prepare to start phase 2
-                        if (passedTime >= 10000) {
+                        if (passedTime >= 90000) {
                             chronometer.stop();
                             Toast toast = Toast.makeText(getApplicationContext(),
                                     "TIME UP - PHASE 1 ENDED", Toast.LENGTH_LONG);
@@ -135,12 +153,14 @@ public class WordgamePlay extends AppCompatActivity {
                             selectIt.setVisibility(View.GONE);
                             //clear fragment words
                             gameFragment.finishGame();
-                            System.out.println("are youkidding me????");
                             phase = Phase.PhaseTimeOut;
                             //----------------------------
                             //start phase 2
 //                            startPhase2Button = (Button) findViewById(R.id.startPhase2);
                             startPhase2Button.setVisibility(View.VISIBLE);
+                            toast = Toast.makeText(getApplicationContext(),
+                                    "(SCORE will be multiplied in phase 2)", Toast.LENGTH_LONG);
+                            toast.show();
                             startPhase2Button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -149,14 +169,21 @@ public class WordgamePlay extends AppCompatActivity {
                                     phase = Phase.Phase2;
                                     chronometer.setBase(SystemClock.elapsedRealtime()-stoppedTime);
                                     chronometer.start();
+                                    gameScore.setText("Your Score is: " + score);
                                 }
                             });
                         }
                         break;
                     case PhaseTimeOut:
-                        System.out.println("you enter a wrong phase");
                         chronometer.stop();
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Phase 1 Finished", Toast.LENGTH_LONG);
+                        toast.show();
+                        //start phase 2 button
                         startPhase2Button.setVisibility(View.VISIBLE);
+                        toast = Toast.makeText(getApplicationContext(),
+                                "(SCORE will be multiplied in phase 2)", Toast.LENGTH_LONG);
+                        toast.show();
                         startPhase2Button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -165,13 +192,14 @@ public class WordgamePlay extends AppCompatActivity {
                                 phase = Phase.Phase2;
                                 chronometer.setBase(SystemClock.elapsedRealtime()-stoppedTime);
                                 chronometer.start();
+                                gameScore.setText("Your Score is: " + score);
                             }
                         });
                         break;
                     case Phase2:
                         if (passedTime >= 180000) {
                             chronometer.stop();
-                            Toast toast = Toast.makeText(getApplicationContext(),
+                            toast = Toast.makeText(getApplicationContext(),
                                     "TIME UP - PHASE 2 ENDED", Toast.LENGTH_LONG);
                             toast.show();
                             //clear view content
@@ -181,10 +209,14 @@ public class WordgamePlay extends AppCompatActivity {
                             selectIt.setVisibility(View.GONE);
                             //clear fragment words
                             gameFragment.finishPhase2();
-                            //not right!!!!!!!!!
                         }
                         break;
-
+                    case GameFinish:
+                        chronometer.stop();
+                        toast = Toast.makeText(getApplicationContext(),
+                                "Game Finished", Toast.LENGTH_LONG);
+                        toast.show();
+                        break;
                 }
             }
         });
@@ -194,8 +226,21 @@ public class WordgamePlay extends AppCompatActivity {
         gameFragment.initPhase2();
     }
 
+    public void pauseGame(){
+        chronometer.stop();
+        gameFragment.getView().setVisibility(View.GONE);
+    }
+
+    public void resumeGame(){
+        gameFragment.getView().setVisibility(View.VISIBLE);
+        chronometer.setBase(SystemClock.elapsedRealtime()-stoppedTime);
+        chronometer.start();
+    }
+
     public void restartGame() {
         gameFragment.restartGame();
+        gameFragment.getView().setVisibility(View.VISIBLE);
+        gameProgress = 0;
 
         //reset buttons
         //startPhase2Button = (Button) findViewById(R.id.startPhase2);
@@ -204,12 +249,14 @@ public class WordgamePlay extends AppCompatActivity {
         matchWordReporter.setText("");
         selectIt.setVisibility(View.GONE);
         startPhase2Button.setVisibility(View.GONE);
+        phase = Phase.Phase1;
+        score = 0;
+        gameScore = (TextView) findViewById(R.id.gameScore);
+        gameScore.setText("Your Score is: " + score);
 
         //restart timer from 00:00
         //90,000 is 90 seconds , 1:30 mins
         chronometer.setBase(SystemClock.elapsedRealtime());
-        System.out.println(SystemClock.elapsedRealtime());
-        System.out.println(chronometer.getBase());
         //waiting for dictionary to be loaded
         phase = Phase.Phase1;
         //in order to delete start phase 2 button
@@ -222,7 +269,7 @@ public class WordgamePlay extends AppCompatActivity {
                     public void run() {
                         chronometer.start();
                     }
-                },2000);
+                },3000);
 
     }
 
@@ -234,6 +281,8 @@ public class WordgamePlay extends AppCompatActivity {
             matchWordReporter.setText("");
             selectIt.setVisibility(View.GONE);
         }else {
+            v.vibrate(500);
+            matchSound.start();
             matchWordReporter.setText("You Got A Match! : " + matchedWord);
             selectIt.setVisibility(View.VISIBLE);
             selectIt.setOnClickListener(new View.OnClickListener() {
@@ -242,6 +291,15 @@ public class WordgamePlay extends AppCompatActivity {
                     selectIt.setVisibility(View.GONE);
                     matchWordReporter.setText("");
                     gameFragment.finishATile(largeTile);
+                    score = score + matchedWord.length();
+                    gameScore = (TextView) findViewById(R.id.gameScore);
+                    gameScore.setText("Your Score is: " + score);
+                    gameProgress++;
+                    v.vibrate(500);
+                    matchSound.start();
+                    if(gameProgress >= 9){
+                        chronometer.setBase(SystemClock.elapsedRealtime()-90000);
+                    }
                 }
             });
         }
@@ -254,6 +312,8 @@ public class WordgamePlay extends AppCompatActivity {
             matchWordReporter.setText("");
             selectIt.setVisibility(View.GONE);
         }else {
+            v.vibrate(500);
+            matchSound.start();
             matchWordReporter.setText("You Got A Match! : " + matchedWord);
             selectIt.setVisibility(View.VISIBLE);
             selectIt.setOnClickListener(new View.OnClickListener() {
@@ -261,119 +321,84 @@ public class WordgamePlay extends AppCompatActivity {
                 public void onClick(View view) {
                     selectIt.setVisibility(View.GONE);
                     matchWordReporter.setText("");
+                    v.vibrate(500);
+                    matchSound.start();
                     gameFragment.finishPhase2();
+                    //multiply for phase 2
+                    score = score * matchedWord.length();
+                    gameScore = (TextView) findViewById(R.id.gameScore);
+                    gameScore.setText("Your Score is: " + score);
+                    //finish the game before time
+                    phase = Phase.GameFinish;
                 }
             });
         }
 
     }
 
-    public void reportWinner(final WordgameTile.Owner winner) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-//            mMediaPlayer.stop();
-//            mMediaPlayer.reset();
-//            mMediaPlayer.release();
-//        }
-        builder.setMessage(getString(R.string.declare_winner_wordgame, winner));
-        builder.setCancelable(false);
-        builder.setPositiveButton(R.string.ok_label_wordgame,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });
-        final Dialog dialog = builder.create();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                mMediaPlayer = MediaPlayer.create(GameActivity.this,
-//                        winner == Tile.Owner.X ? R.raw.oldedgar_winner
-//                                : winner == Tile.Owner.O ? R.raw.notr_loser
-//                                : R.raw.department64_draw
-//                );
-//                mMediaPlayer.start();
-                dialog.show();
-            }
-        }, 500);
-
-        // Reset the board to the initial position
-        gameFragment.initGame();
-    }
-
-//    public void startThinking() {
-//        View thinkView = findViewById(R.id.thinking);
-//        thinkView.setVisibility(View.VISIBLE);
-//    }
-//
-//    public void stopThinking() {
-//        View thinkView = findViewById(R.id.thinking);
-//        thinkView.setVisibility(View.GONE);
-//    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
-//        mMediaPlayer.setLooping(true);
-//        mMediaPlayer.start();
-    }
 
     @Override
     protected void onPause() {
         super.onPause();
         mHandler.removeCallbacks(null);
-//        mMediaPlayer.stop();
-//        mMediaPlayer.reset();
-//        mMediaPlayer.release();
 
         //store game information
         String stateData = gameFragment.getState();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(State_RESTORE, stateData)
                 .apply();
-        Log.d("UT3", "state = " + stateData);
+        Log.d("wordgame", "state = " + stateData);
 
         String wordData = gameFragment.getWords();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(Word_RESTORE, wordData)
                 .apply();
 
-        Log.d("UT3", "state = " + wordData);
+        Log.d("wordgame", "state = " + wordData);
 
         //phase 1
         String moveData = gameFragment.getMoveTrack();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(MoveTrack_RESTORE, moveData)
                 .apply();
-        Log.d("UT3", "state = " + moveData);
-
+        Log.d("wordgame", "state = " + moveData);
 
         String timer = String.valueOf(stoppedTime);
         getPreferences(MODE_PRIVATE).edit()
                 .putString(Timer_RESTORE, timer)
                 .apply();
 
-        Log.d("UT3", "state = " + timer);
+        Log.d("wordgame", "state = " + timer);
 
         String phaseData = String.valueOf(phase);
         getPreferences(MODE_PRIVATE).edit()
                 .putString(Phase_RESTORE, phaseData)
                 .apply();
 
-        Log.d("UT3", "state = " + phaseData);
+        Log.d("wordgame", "state = " + phaseData);
+
+        String scoreData = String.valueOf(score);
+        getPreferences(MODE_PRIVATE).edit()
+                .putString(Score_RESTORE, scoreData)
+                .apply();
+
+        Log.d("wordgame", "state = " + scoreData);
+
+        String gameprogress = String.valueOf(gameProgress);
+        getPreferences(MODE_PRIVATE).edit()
+                .putString(GameProgress_RESTORE, gameprogress)
+                .apply();
+
+        Log.d("wordgame", "state = " + gameprogress);
     }
 
 
     public void putNineCharDictionaryIntoFragment(){
 
-        new Thread(
+        nineWordDictionary = new Thread(
                 new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("start thiking thinking thinking");
-
                         InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
                         BufferedReader r = new BufferedReader(input);
                         String word;
@@ -386,38 +411,29 @@ public class WordgamePlay extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("finish thiking thinking thinking");
-
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
                                 gameFragment.initAllSmallTiles(nineCharWordDictionary);
                             }
                         });
-
-                        System.out.println("quit thiking thinking thinking");
-
-
                     }
                 }
-        ).start();
+        );
+        nineWordDictionary.start();
     }
-
 
 
     public void putDictionaryIntoFragment(){
 
-        new Thread(
+        mainDictionary = new Thread(
                 new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("finish thiking thinking thinking1");
-
                         InputStreamReader input = new InputStreamReader(getResources().openRawResource(R.raw.wordlist));
                         BufferedReader r = new BufferedReader(input);
                         String word;
                         //convert word to hashset
-
                         try {
                             while ((word = r.readLine()) != null) {
                                 dictionary.add(word);
@@ -425,44 +441,16 @@ public class WordgamePlay extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
-                        System.out.println("finish thiking thinking thinking1");
-
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
                                 gameFragment.initDictionary(dictionary);
                             }
                         });
-
-                        System.out.println("finish thiking thinking thinking1");
-
-
                     }
                 }
-        ).start();
+        );
+        mainDictionary.start();
     }
-
-
-//    public ArrayList<String> parseToList(String dictionaryData){
-//        String[] fields = dictionaryData.split(",");
-//        ArrayList<String> listofwords = new ArrayList<>();
-//        for (int index = 0; index < fields.length; index++) {
-//            listofwords.add(fields[index]);
-//        }
-//        return  listofwords;
-//    }
-//
-//
-//    public String parseToString(ArrayList<String> listofwords){
-//        StringBuilder builder = new StringBuilder();
-//        for (int index = 0; index < listofwords.size(); index++) {
-//            builder.append(listofwords.get(index));
-//            builder.append(',');
-//        }
-//        return builder.toString();
-//    }
-
-
 
 }

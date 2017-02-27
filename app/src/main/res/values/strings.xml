@@ -17,14 +17,16 @@
 
     <string name="SOUND">SOUND:</string>
     <string name="soundDescrip"> -----Beep Sound : Adapt from soundbible.com.| License: Attribution 3.0 | Recorded by Mastercard | File Size: 21 KB\n
-        -----http://soundbible.com/1806-Censored-Beep.html\n</string>
+        -----http://soundbible.com/1806-Censored-Beep.html\n\n
+        Button Click Sound: Adapt from Hello Android 4th Edition. Ultimate Tic Tac Toe game.
+    </string>
     <string name="SONG">SONG:</string>
-    <string name="songDescrip"> -----Shape of You -- by Ed Sheeran From Album: Shape of You</string>
+    <string name="songDescrip"> -----Moon Flow -- by Nomak From Album: Muziq and Foto</string>
 
     <!--this part is for word game-->
 
-    <string name="app_name_wordgame">UT3</string>
-    <string name="long_app_name_wordgame">Ultimate Tic Tac Toe</string>
+    <string name="app_name_wordgame">Word Game</string>
+    <string name="long_app_name_wordgame">Word Game</string>
     <string name="action_settings_wordgame">Settings</string>
     <string name="restart_label_wordgame">Restart</string>
     <string name="main_menu_label_wordgame">Main Menu</string>
@@ -36,16 +38,26 @@
     <string name="ok_label_wordgame">OK</string>
     <string name="about_text_wordgame">\
         This game is played just like
-regular Tic Tac Toe with one difference: to win a tile
-you have to win a smaller game of Tic Tac Toe inside that tile.\n\
+regular Scroggle game. The difference is that this game has 2 phases.
+you have to find as many words as you can in phase 1.\n\
 \n\
-A tie happens when there are no further moves.
-In the case of a tie in a small board, that will count as a win for
-both sides in the larger game.
+In phase 2, you will use characters you matched in phase 1.
 </string>
+        <string name="hintWordGame">\
+            The GREEN tile means it is available. You can make move in these green tiles.\n\n
+            The YELLOW tile means it is selected by you. You cannot change the state of yellow tiles.\n\n
+            The RED tile means it is your last move. You can change your last move by cliking red tile again.\n\n
+            The PINK tile means it is matched You cannot change any matched tiles.\n\n
+            ****If you start a new game and the green tiles has no response to your cliking. Please just wait for
+            a second, it is loading the game.\n\n
+        </string>
     <string name="textforchronometer">Time Limitation: 3: 00</string>
     <string name="selectItButton">Select It</string>
     <string name="startPhase2">Start Phase 2</string>
+    <string name="hintwordgame">Hint</string>
+    <string name="pauseGame">Pause</string>
+    <string name="resumeGame">Resume</string>
+    <string name="music">Music On/Off</string>
 
 
 </resources>

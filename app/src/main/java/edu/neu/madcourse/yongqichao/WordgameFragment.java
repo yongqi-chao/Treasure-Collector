@@ -22,6 +22,7 @@ public class WordgameFragment extends Fragment {
         View newButton = rootView.findViewById(R.id.new_button);
         View continueButton = rootView.findViewById(R.id.continue_button);
         View aboutButton = rootView.findViewById(R.id.about_button);
+        View acknowledgement = rootView.findViewById(R.id.acknowledgementWordgame);
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +54,14 @@ public class WordgameFragment extends Fragment {
                 mDialog = builder.show();
             }
         });
+        acknowledgement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Acknowledgements.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 
