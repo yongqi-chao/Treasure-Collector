@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class WordgameTile {
 
-    private final WordgamePlayFragment mGame;
+//    private final WordgamePlayFragment mGame;
     private View mView;
 
     //for small tiles only
@@ -39,8 +39,8 @@ public class WordgameTile {
     public int largePositionNumber;
 
 
-    public WordgameTile(WordgamePlayFragment game) {
-        this.mGame = game;
+    public WordgameTile() {
+//        this.mGame = game;
     }
 
     public View getView() {

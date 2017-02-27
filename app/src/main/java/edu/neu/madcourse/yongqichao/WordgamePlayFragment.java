@@ -35,7 +35,7 @@ public class WordgamePlayFragment extends Fragment {
             R.id.small4, R.id.small5, R.id.small6, R.id.small7, R.id.small8,
             R.id.small9,};
     private Handler mHandler = new Handler();
-    private WordgameTile mEntireBoard = new WordgameTile(this);
+    private WordgameTile mEntireBoard = new WordgameTile();
     private WordgameTile mLargeTiles[] = new WordgameTile[9];
     private WordgameTile mSmallTiles[][] = new WordgameTile[9][9];
     private int mSoundX;
@@ -224,12 +224,12 @@ public class WordgamePlayFragment extends Fragment {
 
     public void initGame() {
         Log.d("Word Game", "init game");
-        mEntireBoard = new WordgameTile(this);
+        mEntireBoard = new WordgameTile();
         // Create all the tiles
         for (int large = 0; large < 9; large++) {
-            mLargeTiles[large] = new WordgameTile(this);
+            mLargeTiles[large] = new WordgameTile();
             for (int small = 0; small < 9; small++) {
-                mSmallTiles[large][small] = new WordgameTile(this);
+                mSmallTiles[large][small] = new WordgameTile();
                 mSmallTiles[large][small].positionNumber = small;
                 mSmallTiles[large][small].largePositionNumber = large;
                 mSmallTiles[large][small].setCharacter(' ');
