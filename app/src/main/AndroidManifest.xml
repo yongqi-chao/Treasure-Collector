@@ -24,12 +24,19 @@
         <activity android:name=".Acknowledgements" />
         <activity android:name=".WordgameActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".WordgameFragment" />
         <activity android:name=".WordgamePlay"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".WordgamePlayFragment" />
-        <activity android:name=".WordgameControlFragment" />
-        <activity android:name=".WordgameTile"></activity>
+            android:screenOrientation="portrait"></activity>
     </application>
+
+    <service android:name='.WordGameMessagingService'>
+        <intent-filter>
+            <action android:name='com.google.android.firebase.MESSAGING_EVENT'></action>
+        </intent-filter>
+    </service>
+    <service android:name='.WordGameInstanceIDService'>
+        <intent-filter>
+            <action android:name='com.google.android.firebase.INSTANCE_ID_EVENT'></action>
+        </intent-filter>
+    </service>
 
 </manifest>

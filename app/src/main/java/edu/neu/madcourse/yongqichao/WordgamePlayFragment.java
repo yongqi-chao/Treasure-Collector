@@ -336,7 +336,7 @@ public class WordgamePlayFragment extends Fragment {
         updateAllTiles();
     }
 
-    //THE FOLLOWING PART IT GETTING AND SETTING GAME DATA-----------------------------------------
+    //THE FOLLOWING PART IS GETTING AND SETTING GAME DATA-----------------------------------------
 
     /** Create a string containing the state of the game. */
     public String getState() {
