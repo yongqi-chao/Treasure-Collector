@@ -36,6 +36,8 @@ public class WordgamePlay extends AppCompatActivity {
     public static final String Phase_RESTORE = "phase_restore";
     public static final String Score_RESTORE = "score_restore";
     public static final String GameProgress_RESTORE = "gameProgress_restore";
+    public static final String SCORE_BOARD = "score_board";
+    public static final String LEADER_BOARD = "learder_board";
     private Handler mHandler = new Handler();
     private WordgamePlayFragment gameFragment;
 
@@ -449,6 +451,19 @@ public class WordgamePlay extends AppCompatActivity {
                 }
         );
         mainDictionary.start();
+    }
+
+    public void restoreBoard(){
+            //restore Phase
+            String scoreboardData = getPreferences(MODE_PRIVATE)
+                    .getString(SCORE_BOARD, null);
+            if (scoreboardData != null) {
+            }
+            //restore game score
+            String leaderboardData = getPreferences(MODE_PRIVATE)
+                    .getString(LEADER_BOARD, null);
+            if (leaderboardData != null) {
+            }
     }
 
 }

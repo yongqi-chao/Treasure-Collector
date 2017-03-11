@@ -60,4 +60,24 @@ In phase 2, you will use characters you matched in phase 1.
     <string name="music">Music On/Off</string>
 
 
+
+    <string name="quickstart_message">The Log Token button logs the Registration token to the log. The Send Notification Button sends the notification to the client device.</string>
+    <string name="send_notification">Send Notification</string>
+    <string name="log_token">Log Token</string>
+
+
+    <string name="msg_subscribed">Subscribed to news topic</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+
+    <string name="go_to_fcm_demo">FCM Demo</string>
+    <string name="go_to_realtime_database_demo">Realtime Database Demo</string>
+
+    <string name="username">User Name</string>
+    <string name="score">Score</string>
+
+    <string name="add5">Add 5</string>
+    <string name="send_notification_text">Send Android Notification</string>
+    <string name="subscribe_to_news">Subscribe to \"News\"</string>
+
+
 </resources>

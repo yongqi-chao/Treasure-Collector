@@ -3,7 +3,8 @@
     package="edu.neu.madcourse.yongqichao">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
 
     <application
         android:allowBackup="true"
@@ -12,30 +13,36 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".DictionaryActivity" />
+        <activity android:name=".Acknowledgements" />
+        <activity
+            android:name=".WordgameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WordgamePlay"
+            android:screenOrientation="portrait" />
+        <activity android:name=".firebase.FIREMAIN">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".DictionaryActivity" />
-        <activity android:name=".Acknowledgements" />
-        <activity android:name=".WordgameActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".WordgamePlay"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".firebase.ReceiveNotificationActivity" />
+        <activity android:name=".firebase.FCMActivity" />
+        <activity android:name=".firebase.RealtimeDatabaseActivity"></activity>
     </application>
 
-    <service android:name='.WordGameMessagingService'>
+    <service android:name=".WordGameMessagingService">
         <intent-filter>
-            <action android:name='com.google.android.firebase.MESSAGING_EVENT'></action>
+            <action android:name="com.google.android.firebase.MESSAGING_EVENT" />
         </intent-filter>
     </service>
-    <service android:name='.WordGameInstanceIDService'>
+    <service android:name=".WordGameInstanceIDService">
         <intent-filter>
-            <action android:name='com.google.android.firebase.INSTANCE_ID_EVENT'></action>
+            <action android:name="com.google.android.firebase.INSTANCE_ID_EVENT" />
         </intent-filter>
     </service>
 
