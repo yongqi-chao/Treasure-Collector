@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/wordgame_menu_background"
+    android:elevation="@dimen/elevation_high"
+    android:orientation="vertical"
+    android:padding="@dimen/menu_padding"
+    tools:context="edu.neu.madcourse.yongqichao.WordgameChooseUsername">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/menu_space"
+        android:text="@string/chooseUsername"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="@dimen/menu_text_size"
+        android:id="@+id/chooseUsernameText" />
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:inputType="text"
+        android:id="@+id/enterUsernameTextView" />
+
+    <Button
+        android:text="@string/skip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/skipButton" />
+
+
+</LinearLayout>
+

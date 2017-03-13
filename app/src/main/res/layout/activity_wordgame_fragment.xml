@@ -52,5 +52,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/acknowledgementWordgame" />
 
+    <Button
+        android:text="@string/scoreboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scoreboard" />
+
+    <Button
+        android:text="@string/leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/leaderboard" />
+
 </LinearLayout>
 

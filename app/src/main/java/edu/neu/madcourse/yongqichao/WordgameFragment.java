@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.neu.madcourse.yongqichao.leaderboard.leaderBoard;
+import edu.neu.madcourse.yongqichao.leaderboard.scoreBoard;
+
 public class WordgameFragment extends Fragment {
 
     private AlertDialog mDialog;
@@ -26,7 +29,7 @@ public class WordgameFragment extends Fragment {
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), WordgamePlay.class);
+                Intent intent = new Intent(getActivity(), WordgameChooseUsername.class);
                 getActivity().startActivity(intent);
             }
         });
@@ -61,6 +64,28 @@ public class WordgameFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+
+
+        //leaderboards activities
+        View scoreboardButton = rootView.findViewById(R.id.scoreboard);
+        View leaderboardButton = rootView.findViewById(R.id.leaderboard);
+        scoreboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), scoreBoard.class);
+                //intent.putExtra(WordgamePlay.KEY_RESTORE, true);
+                getActivity().startActivity(intent);
+            }
+        });
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), leaderBoard.class);
+                //intent.putExtra(WordgamePlay.KEY_RESTORE, true);
+                getActivity().startActivity(intent);
+            }
+        });
+
 
         return rootView;
     }

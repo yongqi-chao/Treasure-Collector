@@ -2,6 +2,7 @@ package edu.neu.madcourse.yongqichao;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,10 +21,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
 public class WordgamePlay extends AppCompatActivity {
+    public static final String USER_NAME_RESTORE = "username_restore";
+    public static final String USER_NAME = "username";
+
     public enum Phase {
         Phase1, Phase2,PhaseTimeOut,GameFinish
     }
@@ -38,6 +44,8 @@ public class WordgamePlay extends AppCompatActivity {
     public static final String GameProgress_RESTORE = "gameProgress_restore";
     public static final String SCORE_BOARD = "score_board";
     public static final String LEADER_BOARD = "learder_board";
+    public static final String LAST_HIGHESTSCORE_WITH_WORD = "lastscore_with_word";
+    String lastHigestScore_word = "";
     private Handler mHandler = new Handler();
     private WordgamePlayFragment gameFragment;
 
@@ -45,14 +53,16 @@ public class WordgamePlay extends AppCompatActivity {
     private ArrayList<String> dictionary = new ArrayList<>();
     private Chronometer chronometer;
     private TextView matchWordReporter, gameScore;
-    private Button selectIt,startPhase2Button;
+    public Button selectIt,startPhase2Button;
     private Phase phase = Phase.Phase1;
     private long stoppedTime;
-    private int score;
+    public int score;
     private int gameProgress;
     Thread nineWordDictionary, mainDictionary;
     private Vibrator v;
     private MediaPlayer matchSound;
+    private ArrayList<String> scoreboard = new ArrayList<>();
+    private String username;
 
 
     @Override
@@ -68,6 +78,7 @@ public class WordgamePlay extends AppCompatActivity {
         gameFragment = (WordgamePlayFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_game);
         boolean restore = getIntent().getBooleanExtra(KEY_RESTORE, false);
+        String usernamerestore = getIntent().getStringExtra(USER_NAME_RESTORE);
         //start timer
         startChronometer(gameFragment);
 
@@ -115,9 +126,22 @@ public class WordgamePlay extends AppCompatActivity {
             if (progressData != null) {
                 gameProgress = Integer.parseInt(progressData);
             }
+            //restore lastHigestScore_word
+            lastHigestScore_word = getPreferences(MODE_PRIVATE)
+                    .getString(LAST_HIGHESTSCORE_WITH_WORD, "");
+            //restore username
+            String usernameData = getPreferences(MODE_PRIVATE)
+                    .getString(USER_NAME, null);
+            if (usernameData != null) {
+                username = usernameData;
+            }
         } else score = 0;
-        gameScore = (TextView) findViewById(R.id.gameScore);
-        gameScore.setText("Your Score is: " + score);
+        displayScore();
+
+        //restore username
+        if(usernamerestore != null && usernamerestore != "") {
+            username = usernamerestore;
+        }
 
         putNineCharDictionaryIntoFragment();
         putDictionaryIntoFragment();
@@ -142,17 +166,17 @@ public class WordgamePlay extends AppCompatActivity {
                     case Phase1:
                         // finish phase 1 and prepare to start phase 2
                         if (passedTime >= 90000) {
+                            gameFragment.finishGame();
+                            selectIt = (Button) findViewById(R.id.selectIt);
                             chronometer.stop();
                             Toast toast = Toast.makeText(getApplicationContext(),
                                     "TIME UP - PHASE 1 ENDED", Toast.LENGTH_LONG);
                             toast.show();
                             //clear view content
                             matchWordReporter = (TextView) findViewById(R.id.matchWordReporter);
-                            selectIt = (Button) findViewById(R.id.selectIt);
                             matchWordReporter.setText("");
                             selectIt.setVisibility(View.GONE);
                             //clear fragment words
-                            gameFragment.finishGame();
                             phase = Phase.PhaseTimeOut;
                             //----------------------------
                             //start phase 2
@@ -169,7 +193,7 @@ public class WordgamePlay extends AppCompatActivity {
                                     phase = Phase.Phase2;
                                     chronometer.setBase(SystemClock.elapsedRealtime()-stoppedTime);
                                     chronometer.start();
-                                    gameScore.setText("Your Score is: " + score);
+                                    displayScore();
                                 }
                             });
                         }
@@ -192,7 +216,7 @@ public class WordgamePlay extends AppCompatActivity {
                                 phase = Phase.Phase2;
                                 chronometer.setBase(SystemClock.elapsedRealtime()-stoppedTime);
                                 chronometer.start();
-                                gameScore.setText("Your Score is: " + score);
+                                displayScore();
                             }
                         });
                         break;
@@ -209,6 +233,8 @@ public class WordgamePlay extends AppCompatActivity {
                             selectIt.setVisibility(View.GONE);
                             //clear fragment words
                             gameFragment.finishPhase2();
+                            //report t0 leaderboard and scoreboard
+                            addtoScoreBoard();
                         }
                         break;
                     case GameFinish:
@@ -251,8 +277,7 @@ public class WordgamePlay extends AppCompatActivity {
         startPhase2Button.setVisibility(View.GONE);
         phase = Phase.Phase1;
         score = 0;
-        gameScore = (TextView) findViewById(R.id.gameScore);
-        gameScore.setText("Your Score is: " + score);
+        displayScore();
 
         //restart timer from 00:00
         //90,000 is 90 seconds , 1:30 mins
@@ -277,10 +302,16 @@ public class WordgamePlay extends AppCompatActivity {
         matchWordReporter = (TextView) findViewById(R.id.matchWordReporter);
         selectIt = (Button) findViewById(R.id.selectIt);
 
+
         if (matchedWord == null){
             matchWordReporter.setText("");
             selectIt.setVisibility(View.GONE);
         }else {
+            //remember the highest score words
+            if(matchedWord.length() > lastHigestScore_word.length()){
+                lastHigestScore_word = matchedWord;
+            }
+
             v.vibrate(500);
             matchSound.start();
             matchWordReporter.setText("You Got A Match! : " + matchedWord);
@@ -292,8 +323,7 @@ public class WordgamePlay extends AppCompatActivity {
                     matchWordReporter.setText("");
                     gameFragment.finishATile(largeTile);
                     score = score + matchedWord.length();
-                    gameScore = (TextView) findViewById(R.id.gameScore);
-                    gameScore.setText("Your Score is: " + score);
+                    displayScore();
                     gameProgress++;
                     v.vibrate(500);
                     matchSound.start();
@@ -312,6 +342,11 @@ public class WordgamePlay extends AppCompatActivity {
             matchWordReporter.setText("");
             selectIt.setVisibility(View.GONE);
         }else {
+            //remember the highest score words
+            if(matchedWord.length() > lastHigestScore_word.length()){
+                lastHigestScore_word = matchedWord;
+            }
+
             v.vibrate(500);
             matchSound.start();
             matchWordReporter.setText("You Got A Match! : " + matchedWord);
@@ -326,10 +361,11 @@ public class WordgamePlay extends AppCompatActivity {
                     gameFragment.finishPhase2();
                     //multiply for phase 2
                     score = score * matchedWord.length();
-                    gameScore = (TextView) findViewById(R.id.gameScore);
-                    gameScore.setText("Your Score is: " + score);
+                    displayScore();
                     //finish the game before time
                     phase = Phase.GameFinish;
+                    //report t0 leaderboard and scoreboard
+                    addtoScoreBoard();
                 }
             });
         }
@@ -390,6 +426,18 @@ public class WordgamePlay extends AppCompatActivity {
                 .apply();
 
         Log.d("wordgame", "state = " + gameprogress);
+
+        getPreferences(MODE_PRIVATE).edit()
+                .putString(LAST_HIGHESTSCORE_WITH_WORD, lastHigestScore_word)
+                .apply();
+
+        Log.d("wordgame", "state = " + lastHigestScore_word);
+
+        getPreferences(MODE_PRIVATE).edit()
+                .putString(USER_NAME, username)
+                .apply();
+
+        Log.d("wordgame", "state = " + username);
     }
 
 
@@ -453,17 +501,138 @@ public class WordgamePlay extends AppCompatActivity {
         mainDictionary.start();
     }
 
-    public void restoreBoard(){
-            //restore Phase
-            String scoreboardData = getPreferences(MODE_PRIVATE)
-                    .getString(SCORE_BOARD, null);
-            if (scoreboardData != null) {
+
+    /////////SCOREBOARD ------------------------------------///////////////////////////
+    public void addtoScoreBoard(){
+        loadScoreBoard();
+
+        Calendar rightNow = Calendar.getInstance();
+        StringBuilder builder = new StringBuilder();
+        builder.append("Played at: " + rightNow.getTime() + "\n");
+        builder.append("Highest Score: " + lastHigestScore_word.length() + "---" + lastHigestScore_word + "\n");
+        builder.append("FINAL SCORE:" + score);
+        insertIntoScoreboard(score,builder.toString());
+
+        saveScoreBoard();
+    }
+
+    public void insertIntoScoreboard(int score, String word){
+        if(scoreboard.isEmpty()){
+            scoreboard.add(Integer.toString(score));
+            scoreboard.add(word);
+        }
+        else {
+            for (int index = 0; index < scoreboard.size(); index++){
+                int scoreFromTheBoard = Integer.valueOf(scoreboard.get(index));
+                int inputPosition = index;
+                if(score > scoreFromTheBoard){
+                    scoreboard.add(inputPosition++,Integer.toString(score));
+                    scoreboard.add(inputPosition,word);
+                    if(scoreboard.size() > 20){
+                        scoreboard.remove(21);
+                        scoreboard.remove(20);
+                    }
+                    break;
+                }
+                index++;
             }
-            //restore game score
-            String leaderboardData = getPreferences(MODE_PRIVATE)
-                    .getString(LEADER_BOARD, null);
-            if (leaderboardData != null) {
+        }
+    }
+
+    public void loadScoreBoard(){
+        SharedPreferences score_board = getSharedPreferences(SCORE_BOARD, 0);
+        String scoreboardData = score_board.getString(SCORE_BOARD, null);
+        if (scoreboardData != null) {
+            String[] fields = scoreboardData.split(",");
+            for (int index = 0; index < fields.length; index++){
+                scoreboard.add(fields[index]);
             }
+        }
+    }
+
+    public void saveScoreBoard(){
+        SharedPreferences score_board = getSharedPreferences(SCORE_BOARD, 0);
+        String scoreboardData = score_board.getString(SCORE_BOARD, null);
+        //build a score board string
+        StringBuilder builder = new StringBuilder();
+        for (int index = 0; index < scoreboard.size(); index++){
+            builder.append(scoreboard.get(index));
+            builder.append(",");
+        }
+
+        SharedPreferences.Editor editor = score_board.edit();
+        editor.putString(SCORE_BOARD, builder.toString());
+        // Commit the edits!
+        editor.apply();
+    }
+
+    /////////LEADERBOARD ------------------------------------///////////////////////////
+    public void addtoleaderBoard(){
+        loadScoreBoard();
+
+        Calendar rightNow = Calendar.getInstance();
+        StringBuilder builder = new StringBuilder();
+        builder.append("Played at: " + rightNow.getTime() + "\n");
+        builder.append("Highest Score: " + lastHigestScore_word.length() + "---" + lastHigestScore_word + "\n");
+        builder.append("FINAL SCORE:" + score);
+        insertIntoScoreboard(score,builder.toString());
+
+        saveScoreBoard();
+    }
+
+    public void insertIntoLeaderboard(int score, String word){
+        if(scoreboard.isEmpty()){
+            scoreboard.add(Integer.toString(score));
+            scoreboard.add(word);
+        }
+        else {
+            for (int index = 0; index < scoreboard.size(); index++){
+                int scoreFromTheBoard = Integer.valueOf(scoreboard.get(index));
+                int inputPosition = index;
+                if(score > scoreFromTheBoard){
+                    scoreboard.add(inputPosition++,Integer.toString(score));
+                    scoreboard.add(inputPosition,word);
+                    if(scoreboard.size() > 20){
+                        scoreboard.remove(21);
+                        scoreboard.remove(20);
+                    }
+                    break;
+                }
+                index++;
+            }
+        }
+    }
+
+    public void loadLeaderBoard(){
+        SharedPreferences score_board = getSharedPreferences(SCORE_BOARD, 0);
+        String scoreboardData = score_board.getString(SCORE_BOARD, null);
+        if (scoreboardData != null) {
+            String[] fields = scoreboardData.split(",");
+            for (int index = 0; index < fields.length; index++){
+                scoreboard.add(fields[index]);
+            }
+        }
+    }
+
+    public void saveLeaderBoard(){
+        SharedPreferences score_board = getSharedPreferences(SCORE_BOARD, 0);
+        String scoreboardData = score_board.getString(SCORE_BOARD, null);
+        //build a score board string
+        StringBuilder builder = new StringBuilder();
+        for (int index = 0; index < scoreboard.size(); index++){
+            builder.append(scoreboard.get(index));
+            builder.append(",");
+        }
+
+        SharedPreferences.Editor editor = score_board.edit();
+        editor.putString(SCORE_BOARD, builder.toString());
+        // Commit the edits!
+        editor.apply();
+    }
+
+    public void displayScore(){
+        gameScore = (TextView) findViewById(R.id.gameScore);
+        gameScore.setText("Your Score is: " + score);
     }
 
 }

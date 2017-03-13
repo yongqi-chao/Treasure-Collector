@@ -305,6 +305,17 @@ public class WordgamePlayFragment extends Fragment {
                 }
             }
         }
+        //update final score phase 2
+        //find match word and report match word
+        if(lastSelectedLarge != -1) {
+            WordgameTile largeTile = mLargeTiles[lastSelectedLarge];
+            if (largeTile.gotMatch(dictionary, mEntireBoard.moveTrackPhase2)) {
+                String matchedWord = largeTile.trackToString(mEntireBoard.moveTrackPhase2);
+                //((WordgamePlay) getActivity()).reportMatchedWordPhase2(matchedWord);
+                ((WordgamePlay) getActivity()).score += matchedWord.length();
+                ((WordgamePlay) getActivity()).displayScore();
+            }
+        }
         //update visual effect to users
         lastSelectedLarge = -1;
         lastSelectedSmall = -1;
@@ -328,6 +339,17 @@ public class WordgamePlayFragment extends Fragment {
                 }
                 //finish a large tile ; lock it to avoid changes on it
                 largeTile.finished = true;
+            }
+        }
+        //update final score phase 1
+        //find match word and report match word
+        if(lastSelectedLarge != -1) {
+            WordgameTile largeTile = mLargeTiles[lastSelectedLarge];
+            if (largeTile.gotMatch(dictionary, largeTile.getMoveTrack())) {
+                String matchedWord = largeTile.trackToString(largeTile.getMoveTrack());
+                ((WordgamePlay) getActivity()).reportMatchedWord(matchedWord, lastSelectedLarge);
+                ((WordgamePlay) getActivity()).score += matchedWord.length();
+                ((WordgamePlay) getActivity()).displayScore();
             }
         }
         //update visual effect to users

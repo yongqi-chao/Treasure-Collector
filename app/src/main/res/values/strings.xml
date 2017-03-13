@@ -58,7 +58,10 @@ In phase 2, you will use characters you matched in phase 1.
     <string name="pauseGame">Pause</string>
     <string name="resumeGame">Resume</string>
     <string name="music">Music On/Off</string>
-
+    <string name="scoreboard">Scoreboard</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="chooseUsername">Enter An Username</string>
+    <string name="skip">Skip</string>
 
 
     <string name="quickstart_message">The Log Token button logs the Registration token to the log. The Send Notification Button sends the notification to the client device.</string>
