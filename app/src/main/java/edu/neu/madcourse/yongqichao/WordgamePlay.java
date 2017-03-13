@@ -12,10 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,9 +33,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
+import edu.neu.madcourse.yongqichao.leaderboard.WordgameRecord;
+
 public class WordgamePlay extends AppCompatActivity {
     public static final String USER_NAME_RESTORE = "username_restore";
     public static final String USER_NAME = "username";
+    private DatabaseReference mDatabase;
 
     public enum Phase {
         Phase1, Phase2,PhaseTimeOut,GameFinish
@@ -62,6 +72,7 @@ public class WordgamePlay extends AppCompatActivity {
     private Vibrator v;
     private MediaPlayer matchSound;
     private ArrayList<String> scoreboard = new ArrayList<>();
+    private ArrayList<String> leaderlist = new ArrayList<>();
     private String username;
 
 
@@ -145,6 +156,7 @@ public class WordgamePlay extends AppCompatActivity {
 
         putNineCharDictionaryIntoFragment();
         putDictionaryIntoFragment();
+        loadLeaderBoard();
 
         Log.d("Wordgame", "restore = " + restore);
 
@@ -235,6 +247,7 @@ public class WordgamePlay extends AppCompatActivity {
                             gameFragment.finishPhase2();
                             //report t0 leaderboard and scoreboard
                             addtoScoreBoard();
+                            addtoleaderBoard();
                         }
                         break;
                     case GameFinish:
@@ -366,6 +379,7 @@ public class WordgamePlay extends AppCompatActivity {
                     phase = Phase.GameFinish;
                     //report t0 leaderboard and scoreboard
                     addtoScoreBoard();
+                    addtoleaderBoard();
                 }
             });
         }
@@ -568,67 +582,86 @@ public class WordgamePlay extends AppCompatActivity {
 
     /////////LEADERBOARD ------------------------------------///////////////////////////
     public void addtoleaderBoard(){
-        loadScoreBoard();
+//        loadLeaderBoard();
+
+        System.out.println("leaderboard!@#$%^&*34262167898679342786546781678234143678342768!@!@#$#@!$@#!@!#@#$%#$^#$%^");
 
         Calendar rightNow = Calendar.getInstance();
         StringBuilder builder = new StringBuilder();
-        builder.append("Played at: " + rightNow.getTime() + "\n");
-        builder.append("Highest Score: " + lastHigestScore_word.length() + "---" + lastHigestScore_word + "\n");
-        builder.append("FINAL SCORE:" + score);
-        insertIntoScoreboard(score,builder.toString());
+        String user = (username == null || username.equals(""))? "Anonymous": username;
+        builder.append(user + ",");
+        builder.append(rightNow.getTime() + ",");
+        builder.append(lastHigestScore_word + "--" + lastHigestScore_word.length() + ",");
+        insertIntoLeaderboard(score,builder.toString());
+        System.out.println("32123121312312251325433453545341541315431431234121212211231221"+builder);
 
-        saveScoreBoard();
+        System.out.println("leaderboard!@#$%^&*34262167898679342786546781678234143678342768!@!@#$#@!$@#!@!#@#$%#$^#$%^");
+        saveLeaderBoard();
     }
 
     public void insertIntoLeaderboard(int score, String word){
-        if(scoreboard.isEmpty()){
-            scoreboard.add(Integer.toString(score));
-            scoreboard.add(word);
-        }
-        else {
-            for (int index = 0; index < scoreboard.size(); index++){
-                int scoreFromTheBoard = Integer.valueOf(scoreboard.get(index));
-                int inputPosition = index;
-                if(score > scoreFromTheBoard){
-                    scoreboard.add(inputPosition++,Integer.toString(score));
-                    scoreboard.add(inputPosition,word);
-                    if(scoreboard.size() > 20){
-                        scoreboard.remove(21);
-                        scoreboard.remove(20);
-                    }
-                    break;
+        for (int index = 0; index < leaderlist.size(); index++){
+            int scoreFromTheBoard = Integer.valueOf(leaderlist.get(index));
+            int inputPosition = index;
+            System.out.println("32123121312312251325433453545341541315431431234121212211231221"+scoreFromTheBoard);
+            if(score > scoreFromTheBoard){
+                System.out.println("leaderboard!@#$%^&*34262167898679342786546781678234143678342768!@!@#$#@!$@#!@!#@#$%#$^#$%^");
+                leaderlist.add(inputPosition++,Integer.toString(score));
+                leaderlist.add(inputPosition,word);
+                if(leaderlist.size() > 20){
+                    leaderlist.remove(21);
+                    leaderlist.remove(20);
                 }
-                index++;
+                break;
             }
+            index++;
         }
     }
 
     public void loadLeaderBoard(){
-        SharedPreferences score_board = getSharedPreferences(SCORE_BOARD, 0);
-        String scoreboardData = score_board.getString(SCORE_BOARD, null);
-        if (scoreboardData != null) {
-            String[] fields = scoreboardData.split(",");
-            for (int index = 0; index < fields.length; index++){
-                scoreboard.add(fields[index]);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(int i = 1; i<11;i++) {
+                    String number = "Number" + i;
+                    WordgameRecord records = dataSnapshot.child(number).getValue(WordgameRecord.class);
+                    String inputRecord = records.username + "," + records.date +
+                            "," + records.wordWithHighestScore;
+                    leaderlist.add(records.finalScore);
+                    leaderlist.add(inputRecord);
+                }
             }
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+            }
+        };
+        mDatabase.child("wordGameRecords").addListenerForSingleValueEvent(postListener);
     }
 
     public void saveLeaderBoard(){
-        SharedPreferences score_board = getSharedPreferences(SCORE_BOARD, 0);
-        String scoreboardData = score_board.getString(SCORE_BOARD, null);
-        //build a score board string
-        StringBuilder builder = new StringBuilder();
-        for (int index = 0; index < scoreboard.size(); index++){
-            builder.append(scoreboard.get(index));
-            builder.append(",");
+        int N = 1;
+        for(int i = 0; i<leaderlist.size();i++) {
+            String number = "Number" + N++;
+            WordgameRecord record = new WordgameRecord();
+            //add score to database
+            record.finalScore = leaderlist.get(i++);
+            String userinfo = leaderlist.get(i);
+            //add other infomation to databse
+            String[] fields = userinfo.split(",");
+            record.username = fields[0];
+            record.date = fields[1];
+            record.wordWithHighestScore = fields[2];
+
+            mDatabase.child("wordGameRecords").child(number).setValue(record);
         }
 
-        SharedPreferences.Editor editor = score_board.edit();
-        editor.putString(SCORE_BOARD, builder.toString());
-        // Commit the edits!
-        editor.apply();
     }
+
+
+
+    ////display score on the screen
 
     public void displayScore(){
         gameScore = (TextView) findViewById(R.id.gameScore);
