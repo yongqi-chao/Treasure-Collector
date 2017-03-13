@@ -35,7 +35,7 @@ public class FCMActivity extends AppCompatActivity {
     private static final String SERVER_KEY = "key=AAAAuseFPB0:APA91bFsOFJtvWkdBwOtXHLZ8OjkgzAI3D6xUCKLdCZaFCi4nwROmz5wWwuZXP9IWJ_jXHQUmX-XqkDyNQ3qca3M8JLYLsoox54_xfTIHpsKalsL4NywiinkTILmPhGqTZh3HG-5fqQf";
 
     // This is the client registration token
-    private static final String CLIENT_REGISTRATION_TOKEN = "ezAsqIUGOdk:APA91bEO8pdimUogQcqYZJ_cCBLOnAGZJwl63MH77ieerpzMZY1gpxWWvCMRMBGgb61mhKAP-hq0rpdzyxe9uhdLIHglnLrXSrR0iBLgXQmNTSpjQQOOr3rMFtyQO9DtwyjL2JmYXgvu";
+    private static final String CLIENT_REGISTRATION_TOKEN = "cuVbRDugH8w:APA91bF3zG6f6zs5g7CKjtZAUgOArjewTeVX5Aa9yw3xmH51ilF5oobxkuyyNT9f8tsPD0UkyT-0T8MEvs8UMBLGikMU0IQOUg1lQX5NIU79KhamgLgpjwN_7Q2NHK1FUYVG_jPOsPBg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

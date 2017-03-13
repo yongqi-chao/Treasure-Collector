@@ -1,13 +1,14 @@
-package edu.neu.madcourse.yongqichao.firebase;
+package edu.neu.madcourse.yongqichao.leaderboard;
 
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-public class WordGameInstanceIDService extends FirebaseInstanceIdService {
 
-    private static final String TAG = WordGameInstanceIDService.class.getSimpleName();
+public class gameInstanceIDService extends FirebaseInstanceIdService {
+
+    private static final String TAG = edu.neu.madcourse.yongqichao.leaderboard.gameInstanceIDService.class.getSimpleName();
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of

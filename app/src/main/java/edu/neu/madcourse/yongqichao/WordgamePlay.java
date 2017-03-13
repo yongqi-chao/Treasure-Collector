@@ -1,11 +1,14 @@
 package edu.neu.madcourse.yongqichao;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -23,16 +26,28 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Scanner;
 
+import edu.neu.madcourse.yongqichao.firebase.FCMActivity;
 import edu.neu.madcourse.yongqichao.leaderboard.WordgameRecord;
 
 public class WordgamePlay extends AppCompatActivity {
@@ -76,11 +91,21 @@ public class WordgamePlay extends AppCompatActivity {
     private String username;
 
 
+    // Please add the server key from your firebase console in the follwoing format "key=<serverKey>"
+    private static final String SERVER_KEY = "key=AAAAuseFPB0:APA91bFsOFJtvWkdBwOtXHLZ8OjkgzAI3D6xUCKLdCZaFCi4nwROmz5wWwuZXP9IWJ_jXHQUmX-XqkDyNQ3qca3M8JLYLsoox54_xfTIHpsKalsL4NywiinkTILmPhGqTZh3HG-5fqQf";
+
+    // This is the client registration token
+    private static final String CLIENT_REGISTRATION_TOKEN = FirebaseInstanceId.getInstance().getToken();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wordgame_play);
         setTitle("Word Game");
+
+        System.out.println("Refreshed token: " + FirebaseInstanceId.getInstance().getToken());
+        System.out.println("Refreshed token: " + CLIENT_REGISTRATION_TOKEN);
 
         v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         matchSound = MediaPlayer.create(this, R.raw.oldedgar_winner);
@@ -584,22 +609,22 @@ public class WordgamePlay extends AppCompatActivity {
     public void addtoleaderBoard(){
 //        loadLeaderBoard();
 
-        System.out.println("leaderboard!@#$%^&*34262167898679342786546781678234143678342768!@!@#$#@!$@#!@!#@#$%#$^#$%^");
-
         Calendar rightNow = Calendar.getInstance();
         StringBuilder builder = new StringBuilder();
         String user = (username == null || username.equals(""))? "Anonymous": username;
         builder.append(user + ",");
         builder.append(rightNow.getTime() + ",");
         builder.append(lastHigestScore_word + "--" + lastHigestScore_word.length() + ",");
-        insertIntoLeaderboard(score,builder.toString());
-        System.out.println("32123121312312251325433453545341541315431431234121212211231221"+builder);
+        //send notification
+        StringBuilder notify = new StringBuilder();
+        notify.append(user + " achieve a new score: " + score);
+        //do the insertion action
+        insertIntoLeaderboard(score,builder.toString(), notify.toString());
 
-        System.out.println("leaderboard!@#$%^&*34262167898679342786546781678234143678342768!@!@#$#@!$@#!@!#@#$%#$^#$%^");
         saveLeaderBoard();
     }
 
-    public void insertIntoLeaderboard(int score, String word){
+    public void insertIntoLeaderboard(int score, String word, String noti){
         for (int index = 0; index < leaderlist.size(); index++){
             int scoreFromTheBoard = Integer.valueOf(leaderlist.get(index));
             int inputPosition = index;
@@ -612,6 +637,7 @@ public class WordgamePlay extends AppCompatActivity {
                     leaderlist.remove(21);
                     leaderlist.remove(20);
                 }
+                pushNotification(noti);
                 break;
             }
             index++;
@@ -666,6 +692,92 @@ public class WordgamePlay extends AppCompatActivity {
     public void displayScore(){
         gameScore = (TextView) findViewById(R.id.gameScore);
         gameScore.setText("Your Score is: " + score);
+    }
+
+
+    //SEND NOTIFICATION TO USERS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    public void pushNotification(final String body) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                pushNotificationThread(body);
+            }
+        }).start();
+    }
+
+    /**
+     * Pushes a notification to a given device-- in particular, this device,
+     * because that's what the instanceID token is defined to be.
+     */
+    private void pushNotificationThread(String body) {
+        JSONObject jPayload = new JSONObject();
+        JSONObject jNotification = new JSONObject();
+        try {
+            jNotification.put("title", "WordGame LEADERBOARD");
+            jNotification.put("body", body);
+            jNotification.put("sound", "default");
+            jNotification.put("badge", "1");
+            jNotification.put("click_action", "OPEN_ACTIVITY_1");
+
+            // If sending to a single client
+            jPayload.put("to", "/topics/news");//CLIENT_REGISTRATION_TOKEN);
+
+//            // If sending to multiple clients (must be more than 1 and less than 1000)
+//            JSONArray ja = new JSONArray();
+//            ja.put(CLIENT_REGISTRATION_TOKEN);
+//            // Add Other client tokens
+//            ja.put(FirebaseInstanceId.getInstance().getToken());
+//            jPayload.put("registration_ids", ja);
+
+
+            jPayload.put("priority", "high");
+            jPayload.put("notification", jNotification);
+
+
+            URL url = new URL("https://fcm.googleapis.com/fcm/send");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", SERVER_KEY);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            // Send FCM message content.
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(jPayload.toString().getBytes());
+            outputStream.close();
+
+            // Read FCM response.
+            InputStream inputStream = conn.getInputStream();
+            final String resp = convertStreamToString(inputStream);
+
+//            Handler h = new Handler(Looper.getMainLooper());
+//            h.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.e(TAG, "run: " + resp);
+//                    Toast.makeText(FCMActivity.this,resp,Toast.LENGTH_LONG).show();
+//                }
+//            });
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String convertStreamToString(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next().replace(",", ",\n") : "";
+    }
+
+    public void subscribeToNews(View view){
+        // [START subscribe_topics]
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        // [END subscribe_topics]
+
+        // Log and toast
+        String msg = getString(R.string.msg_subscribed);
+        //Log.d(TAG, msg);
+       // Toast.makeText(FCMActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

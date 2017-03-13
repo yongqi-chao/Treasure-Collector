@@ -1,4 +1,4 @@
-package edu.neu.madcourse.yongqichao.firebase;
+package edu.neu.madcourse.yongqichao.leaderboard;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,11 +12,11 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import edu.neu.madcourse.yongqichao.firebase.FIREMAIN;
 import edu.neu.madcourse.yongqichao.R;
 
-public class WordGameMessagingService extends FirebaseMessagingService {
-    private static final String TAG = WordGameMessagingService.class.getSimpleName();
+public class gameMessagingService extends FirebaseMessagingService {
+
+    private static final String TAG = edu.neu.madcourse.yongqichao.leaderboard.gameMessagingService.class.getSimpleName();
 
     /**
      * Called when message is received.
@@ -48,7 +48,7 @@ public class WordGameMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody());
+            sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
         }
 
 
@@ -63,8 +63,8 @@ public class WordGameMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, FIREMAIN.class);
+    private void sendNotification(String title, String messageBody) {
+        Intent intent = new Intent(this, leaderBoard.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -73,7 +73,7 @@ public class WordGameMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.o_red)
-                .setContentTitle("Class Message")
+                .setContentTitle(title)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

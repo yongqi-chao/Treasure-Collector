@@ -10,10 +10,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.neu.madcourse.yongqichao.leaderboard.scoreBoard">
 
+    <TextView
+        android:text="@string/scoreboardTop10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:textColor= "@color/blue_color"
+        android:id="@+id/scoreboardTextView" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/scoreboard" />
+        android:id="@+id/scoreboard"
+        android:layout_below="@+id/scoreboardTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
