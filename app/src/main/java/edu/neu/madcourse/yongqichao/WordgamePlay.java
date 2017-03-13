@@ -305,6 +305,7 @@ public class WordgamePlay extends AppCompatActivity {
         gameFragment.restartGame();
         gameFragment.getView().setVisibility(View.VISIBLE);
         gameProgress = 0;
+        lastHigestScore_word = "";
 
         //reset buttons
         //startPhase2Button = (Button) findViewById(R.id.startPhase2);
