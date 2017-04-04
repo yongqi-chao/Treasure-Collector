@@ -43,7 +43,7 @@ you have to find as many words as you can in phase 1.\n\
 \n\
 In phase 2, you will use characters you matched in phase 1.
 </string>
-        <string name="hintWordGame">\
+    <string name="hintWordGame">\
             The GREEN tile means it is available. You can make move in these green tiles.\n\n
             The YELLOW tile means it is selected by you. You cannot change the state of yellow tiles.\n\n
             The RED tile means it is your last move. You can change your last move by cliking red tile again.\n\n
@@ -64,7 +64,6 @@ In phase 2, you will use characters you matched in phase 1.
     <string name="skip">Skip</string>
     <string name="leaderboardTop10">Leaderbord Top 10</string>
     <string name="scoreboardTop10">Scoreboard Top 10</string>
-
 
 
     <string name="quickstart_message">The Log Token button logs the Registration token to the log. The Send Notification Button sends the notification to the client device.</string>

@@ -13,11 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".AboutActivity" />
         <activity android:name=".DictionaryActivity" />
@@ -28,11 +24,7 @@
         <activity
             android:name=".WordgamePlay"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".firebase.FIREMAIN">
-
-        </activity>
-
+        <activity android:name=".firebase.FIREMAIN"></activity>
         <activity android:name=".firebase.ReceiveNotificationActivity" />
         <activity android:name=".firebase.FCMActivity" />
         <activity android:name=".firebase.RealtimeDatabaseActivity" />
@@ -44,7 +36,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".leaderboard.gameMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -52,6 +43,13 @@
         </service>
 
         <activity android:name=".WordgameChooseUsername" />
+        <activity android:name=".mapgame.mapgameMain">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
