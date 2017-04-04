@@ -83,6 +83,7 @@ In phase 2, you will use characters you matched in phase 1.
     <string name="add5">Add 5</string>
     <string name="send_notification_text">Send Android Notification</string>
     <string name="subscribe_to_news">Subscribe to \"News\"</string>
+    <string name="title_activity_mapgame_map">Map</string>
 
 
 </resources>
