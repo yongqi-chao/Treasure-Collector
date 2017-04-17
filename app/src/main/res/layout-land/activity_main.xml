@@ -65,4 +65,13 @@
         android:layout_alignStart="@+id/dictionary"
         android:layout_alignRight="@+id/dictionary"
         android:layout_alignEnd="@+id/dictionary" />
+
+    <Button
+        android:id="@+id/MapGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Project: Collect Coins"
+        android:layout_alignBaseline="@+id/quit"
+        android:layout_alignBottom="@+id/quit"
+        android:layout_alignStart="@+id/wordgame" />
 </RelativeLayout>

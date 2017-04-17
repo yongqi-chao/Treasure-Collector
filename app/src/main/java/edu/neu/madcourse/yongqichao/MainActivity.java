@@ -10,10 +10,12 @@ import android.widget.RelativeLayout;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import edu.neu.madcourse.yongqichao.mapgame.MapGameMainView;
+
 
 public class MainActivity extends AppCompatActivity {
     RelativeLayout background;
-    Button errorButton, aboutButton, dictionaryButton, wordgameButton, quitButton;
+    Button errorButton, aboutButton, dictionaryButton, wordgameButton, quitButton, mapgameButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //add running Game button
+        mapgameButton = (Button) findViewById(R.id.MapGame);
+        mapgameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapgame = new Intent(MainActivity.this, MapGameMainView.class);
+                startActivity(mapgame);
+            }
+        });
+        mapgameButton.setBackgroundColor(getResources().getColor(R.color.blue_color));
     }
 }
 

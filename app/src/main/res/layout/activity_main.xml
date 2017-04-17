@@ -14,20 +14,18 @@
         android:text="@string/aboutButton"
         android:layout_height="wrap_content"
         android:id="@+id/about"
-        android:layout_marginTop="23dp"
+        android:layout_width="150dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_width="150dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="@string/errorButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/error"
-        android:layout_marginTop="38dp"
         android:layout_below="@+id/about"
-        android:layout_alignLeft="@+id/about"
-        android:layout_alignStart="@+id/about" />
+        android:layout_alignStart="@+id/about"
+        android:layout_marginTop="15dp" />
 
     <Button
         android:text="@string/dictionaryButton"
@@ -35,9 +33,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/dictionary"
         android:layout_below="@+id/error"
-        android:layout_alignLeft="@+id/error"
-        android:layout_alignStart="@+id/error"
-        android:layout_marginTop="27dp" />
+        android:layout_alignStart="@+id/error" />
 
     <Button
         android:text="@string/wordgameButton"
@@ -45,9 +41,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/wordgame"
         android:layout_below="@+id/dictionary"
-        android:layout_alignLeft="@+id/dictionary"
-        android:layout_alignStart="@+id/dictionary"
-        android:layout_marginTop="32dp" />
+        android:layout_alignStart="@+id/dictionary" />
 
     <Button
         android:text="@string/quitButton"
@@ -58,4 +52,13 @@
         android:layout_alignLeft="@+id/wordgame"
         android:layout_alignStart="@+id/wordgame"
         android:layout_marginTop="28dp" />
+
+    <Button
+        android:id="@+id/MapGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/quit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="ProJect: Collect Coins" />
 </RelativeLayout>
