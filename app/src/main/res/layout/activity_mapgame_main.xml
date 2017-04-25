@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Level:0"
+        android:text="Level:"
         android:textSize="20sp" />
 
 
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:text="Score: 000"
+        android:text="Score:"
         android:textSize="20sp" />
 
 
