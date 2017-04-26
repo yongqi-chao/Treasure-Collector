@@ -9,11 +9,12 @@ import android.view.View;
 import android.widget.Button;
 
 import edu.neu.madcourse.yongqichao.AboutActivity;
+import edu.neu.madcourse.yongqichao.Acknowledgements;
 import edu.neu.madcourse.yongqichao.MainActivity;
 import edu.neu.madcourse.yongqichao.R;
 
 public class MapGameMainView extends AppCompatActivity {
-    Button loginButton, gameInstructionButton;
+    Button loginButton, gameInstructionButton, acknowledgement;
     private AlertDialog mDialog;
 
     @Override
@@ -21,7 +22,7 @@ public class MapGameMainView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_game_main_view);
 
-        setTitle("Running Game");
+        setTitle("COLLECT COINS");
 
         //add Log In button.
         loginButton = (Button)findViewById(R.id.loginButton);
@@ -39,7 +40,7 @@ public class MapGameMainView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapGameMainView.this);
-                builder.setMessage(R.string.hintWordGame);
+                builder.setMessage(R.string.hintMapGame);
                 builder.setCancelable(false);
                 builder.setPositiveButton(R.string.ok_label_wordgame,
                         new DialogInterface.OnClickListener() {
@@ -49,6 +50,16 @@ public class MapGameMainView extends AppCompatActivity {
                             }
                         });
                 mDialog = builder.show();
+            }
+        });
+
+        //add Log In button.
+        acknowledgement = (Button)findViewById(R.id.mapgameAcknoledgement);
+        acknowledgement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent login = new Intent(MapGameMainView.this, Acknowledgements.class);
+                startActivity(login);
             }
         });
 

@@ -142,10 +142,10 @@ public class MapGameLoginView extends AppCompatActivity
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MapGameLoginView.this, "Authentication Success.",
+                            Toast.makeText(MapGameLoginView.this, "Authentication Succeed.",
                                     Toast.LENGTH_SHORT).show();
                             Intent login = new Intent(MapGameLoginView.this, MapGameMapView.class);
-                            login.putExtra("username", "jaychao");// usernameText.getText().toString());
+                            login.putExtra("username", usernameText.getText().toString());
                             startActivity(login);
                             final MediaPlayer clickSound = MediaPlayer.create(MapGameLoginView.this, R.raw.beep);
                             clickSound.start();
@@ -181,20 +181,6 @@ public class MapGameLoginView extends AppCompatActivity
             String name = email;
             String password = pass;
 
-//            if (TextUtils.isEmpty(email)) {
-//                mEmailField.setError("Required.");
-//                valid = false;
-//            } else {
-//                mEmailField.setError(null);
-//            }
-//
-//            String password = mPasswordField.getText().toString();
-//            if (TextUtils.isEmpty(password)) {
-//                mPasswordField.setError("Required.");
-//                valid = false;
-//            } else {
-//                mPasswordField.setError(null);
-//            }
             if(!name.matches("[a-zA-Z@.]+")){
                 valid = false;
             }
@@ -205,27 +191,6 @@ public class MapGameLoginView extends AppCompatActivity
             return valid;
         }
 
-//        private void updateUI(FirebaseUser user) {
-//            hideProgressDialog();
-//            if (user != null) {
-//                mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-//                        user.getEmail(), user.isEmailVerified()));
-//                mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//
-//                findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-//                findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-//                findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-//
-//                findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
-//            } else {
-//                mStatusTextView.setText(R.string.signed_out);
-//                mDetailTextView.setText(null);
-//
-//                findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-//                findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-//                findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
-//            }
-//        }
 
     @Override
     public void onClick(View v) {
@@ -235,13 +200,12 @@ public class MapGameLoginView extends AppCompatActivity
 
 //                createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.passwordText) {
-            //signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            passwordText.setText("");
         } else if (i == R.id.loginViewlogin) {
             if(!passwordText.getText().toString().isEmpty() && !usernameText.getText().toString().isEmpty()){
                 signIn(usernameText.getText().toString() + "@yq.com", passwordText.getText().toString());
             }
             else{
-                signIn("qq@yq.com", "123123");
                 Toast.makeText(MapGameLoginView.this, "Authentication failed.",
                         Toast.LENGTH_SHORT).show();
             }

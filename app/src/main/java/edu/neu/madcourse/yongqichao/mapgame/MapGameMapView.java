@@ -130,6 +130,30 @@ public class MapGameMapView extends AppCompatActivity
         mapFrag.getMapAsync(this);
 
         loadUserList();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapGameMapView.this);
+        builder.setMessage("Find Golden Coins on the Map");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Start Running",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // nothing
+                    }
+                });
+        mDialog = builder.show();
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(MapGameMapView.this);
+        builder2.setMessage("You can also place coins for other players");
+        builder2.setCancelable(false);
+        builder2.setPositiveButton("Start Running",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // nothing
+                    }
+                });
+        mDialog = builder2.show();
+
     }
 
     ////////////////FOLLOWING IS SAVING & LOADING USER INFO TO DATABASE/////////////////////////////
@@ -154,7 +178,6 @@ public class MapGameMapView extends AppCompatActivity
                     score = User.score;
                     levelMapView.setText("level:" + level);
                     scoreMapView.setText("score:" + score);
-                    System.out.println("your score is !!!!" + score);
                 }
                 RedMarker.clear();
                 GreenMarker.clear();
@@ -236,30 +259,6 @@ public class MapGameMapView extends AppCompatActivity
     }
 
     //////////FOLLOWING IS  GAME LOGIC CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    public List<LatLng> listToLatlng(List<String> listpoints) {
-        List<LatLng> newL = new ArrayList<>();
-        for (String s : listpoints) {
-            String[] fields = s.split(",");
-            LatLng l = new LatLng(Double.parseDouble(fields[0]), Double.parseDouble(fields[1]));
-            newL.add(l);
-        }
-        return newL;
-    }
-
-    public List<String> listToString(List<LatLng> listpoints) {
-        List<String> newL = new ArrayList<>();
-        for (LatLng l : listpoints) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(Double.toString(l.latitude));
-            sb.append(",");
-            sb.append(Double.toString(l.longitude));
-            newL.add(sb.toString());
-        }
-        return newL;
-    }
-
-
     public void updateMarker() {
         mGoogleMap.clear();
 
@@ -291,7 +290,19 @@ public class MapGameMapView extends AppCompatActivity
         marker.showInfoWindow();
         LatLng dest = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude); // markerPoints.get(1);
 
+        // move the camera
+        if((destMarker!= null && !marker.getId().equals(destMarker.getId()))
+                || (destMarker == null)){
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(dest)      // Sets the center of the map to Mountain View
+                    .zoom(15)                   // Sets the zoom
+                    .bearing(140)                // Sets the orientation of the camera to east
+                    .tilt(60)      // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),5000,null);
+        }
 
+        //find whether you are near a coin
         if(!marker.getTitle().equals("NotAvailable")) {
             //myLatlng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             if ((myLatlng.latitude+0.002 > dest.latitude) && (myLatlng.latitude-0.002 < dest.latitude)
@@ -299,7 +310,6 @@ public class MapGameMapView extends AppCompatActivity
 
                 score += 100;
                 mDatabase.child("mapGameRecords").child("Users").child(username).child("score").setValue(score);
-
 
                 mDatabase.child("mapGameRecords").child("Markers").child(marker.getTitle()).removeValue();
 
@@ -332,55 +342,30 @@ public class MapGameMapView extends AppCompatActivity
                     street.putExtra("lat", myLatlng);// usernameText.getText().toString());
                     startActivity(street);
                 }
+                destMarker = null;
 
                 return true;
+            } else{
+                System.out.println("your level is !!!!" + score);
+                LatLng origin = myLatlng;
+                // Getting URL to the Google Directions API
+                String url = getDirectionsUrl(origin, dest);
+                DownloadTask downloadTask = new DownloadTask();
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(url);
+                destMarker = marker;
+                updateMarker();
             }
         }
 
-
-        if((destMarker!= null && !marker.getId().equals(destMarker.getId()))
-                || (destMarker == null)){
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(dest)      // Sets the center of the map to Mountain View
-                    .zoom(15)                   // Sets the zoom
-                    .bearing(140)                // Sets the orientation of the camera to east
-                    .tilt(60)      // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),5000,null);
-        }
-
-        if(!marker.getTitle().equals("NotAvailable")) {
-            LatLng origin = myLatlng;
-            // Getting URL to the Google Directions API
-            String url = getDirectionsUrl(origin, dest);
-            DownloadTask downloadTask = new DownloadTask();
-            // Start downloading json data from Google Directions API
-            downloadTask.execute(url);
-            destMarker = marker;
-            updateMarker();
-        }
         return true;
     }
-
-    private static final LatLng SpaceNeedle = new LatLng(47.620422,-122.349358);
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.style_map));
-
-//        // Move the camera instantly to Sydney with a zoom of 15.
-//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SYDNEY, 15));
-//
-//// Zoom in, animating the camera.
-//        map.animateCamera(CameraUpdateFactory.zoomIn());
-//
-//// Zoom out to zoom level 10, animating with a duration of 2 seconds.
-//        map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-
-// Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
-
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -406,9 +391,6 @@ public class MapGameMapView extends AppCompatActivity
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
-//                MarkerOptions marker = new MarkerOptions().position(point).alpha(1f);
-//                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-//                mGoogleMap.addMarker(marker);
 
                 System.out.println("d(, e.toString());");
 
@@ -417,15 +399,8 @@ public class MapGameMapView extends AppCompatActivity
                 if (destMarker!=null) {
                     onMarkerClick(destMarker);
                 }else updateMarker();
-
-
-//                syncPoint(userList, point);
-
-                //addMarker();
             }
         });
-
-        //mGoogleMap.setOnMarkerClickListener(this);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -480,6 +455,8 @@ public class MapGameMapView extends AppCompatActivity
         markerOptions.alpha(0.8f);
         markerOptions.snippet("you are player");
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+
+        System.out.println("your score is !!!!" + score);
 
         float[] result = new float[1]; // save distance
         if (destMarker != null) {
@@ -748,6 +725,11 @@ public class MapGameMapView extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        onConnected(Bundle.EMPTY);
+    }
 //        @Override
 //        public boolean onCreateOptionsMenu(Menu menu) {
 //            // Inflate the menu; this adds items to the action bar if it is present.

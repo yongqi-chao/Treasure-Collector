@@ -18,5 +18,8 @@ public class Acknowledgements extends AppCompatActivity {
 
         TextView song = (TextView) findViewById(R.id.SONG);
         song.setTextSize(20);
+
+        TextView other = (TextView) findViewById(R.id.PICTURE);
+        other.setTextSize(20);
     }
 }

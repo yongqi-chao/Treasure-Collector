@@ -21,7 +21,13 @@
         Button Click Sound: Adapt from Hello Android 4th Edition. Ultimate Tic Tac Toe game.
     </string>
     <string name="SONG">SONG:</string>
-    <string name="songDescrip"> -----Moon Flow -- by Nomak From Album: Muziq and Foto</string>
+    <string name="songDescrip"> -----Moon Flow -- by Nomak From Album: Muziq and Foto\n\n</string>
+    <string name="MAPGAMEPICTURENDescrip"> -----Red Coin --\n   From www.coinapp.org \n
+        -----Gold Coin --\n   From https://www.iconexperience.com/g_collection/icons/?icon=money_coin\n
+        -----Direction JSON Parser --\n From "Drawing driving route directions between two locations"\n
+             BY George Mathew\n
+        -- "http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/"</string>
+
 
     <!--this part is for word game-->
 
@@ -85,5 +91,12 @@ In phase 2, you will use characters you matched in phase 1.
     <string name="subscribe_to_news">Subscribe to \"News\"</string>
     <string name="title_activity_mapgame_map">Map</string>
 
+    <string name="hintMapGame">\
+        Your Goal: Collect COINS to Level Up\n\n
+        Red Coin: Placed by Yourself and Can not Be Collected\n\n
+        Gold Coin: Placed by Other Players and Can Be Collected\n\n\n
+
+        Start Running!
+        </string>
 
 </resources>

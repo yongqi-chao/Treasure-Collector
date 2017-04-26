@@ -42,4 +42,20 @@
         android:layout_below="@+id/SONG"
         android:layout_centerHorizontal="true"
         android:id="@+id/songDescription" />
+
+    <TextView
+        android:id="@+id/PICTURE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/songDescription"
+        android:text="Others" />
+
+    <TextView
+        android:id="@+id/mapgamepictureDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/PICTURE"
+        android:text="@string/MAPGAMEPICTURENDescrip" />
 </RelativeLayout>
