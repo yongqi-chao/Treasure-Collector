@@ -33,7 +33,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,12 +88,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mapgame.MapGameMainView"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".mapgame.MapGameLoginView"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <service android:name=".mapgame.gameInstanceIDService">
             <intent-filter>
@@ -105,6 +103,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".mapgame.MapGameStreetView"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
