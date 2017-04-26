@@ -29,8 +29,7 @@
         android:layout_alignStart="@+id/usernameText"
         android:layout_centerVertical="true"
         android:ems="10"
-        android:inputType="textPassword"
-        android:text="At Least 6 Characters" />
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/textView"
@@ -48,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/passwordText"
         android:layout_alignStart="@+id/passwordText"
-        android:text="PASSWORD:"
+        android:text="PASSWORD:\n (At least 6 characters)"
         android:textSize="20sp" />
 
     <Button

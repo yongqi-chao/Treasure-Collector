@@ -131,17 +131,7 @@ public class MapGameMapView extends AppCompatActivity
 
         loadUserList();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MapGameMapView.this);
-        builder.setMessage("Find Golden Coins on the Map");
-        builder.setCancelable(false);
-        builder.setPositiveButton("Start Running",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // nothing
-                    }
-                });
-        mDialog = builder.show();
+
         AlertDialog.Builder builder2 = new AlertDialog.Builder(MapGameMapView.this);
         builder2.setMessage("You can also place coins for other players");
         builder2.setCancelable(false);
@@ -153,6 +143,17 @@ public class MapGameMapView extends AppCompatActivity
                     }
                 });
         mDialog = builder2.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapGameMapView.this);
+        builder.setMessage("Find Golden Coins on the Map");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Start Running",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // nothing
+                    }
+                });
+        mDialog = builder.show();
 
     }
 
