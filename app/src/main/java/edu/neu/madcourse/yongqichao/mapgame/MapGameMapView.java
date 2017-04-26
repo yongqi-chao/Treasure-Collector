@@ -100,9 +100,6 @@ public class MapGameMapView extends AppCompatActivity
     public Integer score;
     public List<GameMarker> RedMarker = new ArrayList<>();
     public List<GameMarker> GreenMarker = new ArrayList<>();
-    private List<Integer> markerIds = new ArrayList<>();
-    private List<String> redMarkerIds = new ArrayList<>();
-    private List<String> greenMarkerIds = new ArrayList<>();
     private Integer markerAmount;
 
 
@@ -131,7 +128,6 @@ public class MapGameMapView extends AppCompatActivity
 
         loadUserList();
 
-
         AlertDialog.Builder builder2 = new AlertDialog.Builder(MapGameMapView.this);
         builder2.setMessage("You can also place coins for other players");
         builder2.setCancelable(false);
@@ -157,6 +153,7 @@ public class MapGameMapView extends AppCompatActivity
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////FOLLOWING IS SAVING & LOADING USER INFO TO DATABASE/////////////////////////////
 
     public void loadUserList() {
@@ -220,70 +217,27 @@ public class MapGameMapView extends AppCompatActivity
     }
 
     ////////////////////ABOVE IS SAVING & LOADING USER INFO TO DATABASE/////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void onPause() {
-        super.onPause();
 
-        //stop location updates when Activity is no longer active
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////FOLLOWING IS Game Logic/////////////////////////////////////////////////////////
 
-        if (isSensorPresent) {
-            mSensorManager.unregisterListener(this);
-        }
-
-        saveUserList();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isSensorPresent) {
-            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        String mStepsSinceReboot = (String.valueOf(event.values[0]));
-//        Toast toast = Toast.makeText(getApplicationContext(), mStepsSinceReboot
-//                , Toast.LENGTH_SHORT);
-//        toast.show();
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    //////////FOLLOWING IS  GAME LOGIC CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public void updateMarker() {
         mGoogleMap.clear();
 
         for (GameMarker m : RedMarker) {
-           // if (!markerIds.contains(m.markerId)) {
-                LatLng l = new LatLng(m.latitude, m.longitude);
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(l).title("NotAvailable")
-                        .icon(BitmapDescriptorFactory.fromResource(R.raw.redcoin)));
-//                mGoogleMap.addMarker(marker.get);
-              //  markerIds.add(m.markerId);
-            //}
+            LatLng l = new LatLng(m.latitude, m.longitude);
+            Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(l).title("NotAvailable")
+                    .icon(BitmapDescriptorFactory.fromResource(R.raw.redcoin)));
         }
 
         for (GameMarker m : GreenMarker) {
-
-//            if (!markerIds.contains(m.markerId)) {
-                LatLng l = new LatLng(m.latitude, m.longitude);
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(l).title(m.markerId.toString())
-                        .icon(BitmapDescriptorFactory.fromResource(R.raw.coin)));
-                //markerIds.add(m.markerId);
-            //}
+            LatLng l = new LatLng(m.latitude, m.longitude);
+            Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(l).title(m.markerId.toString())
+                    .icon(BitmapDescriptorFactory.fromResource(R.raw.coin)));
         }
         mGoogleMap.setOnMarkerClickListener(this);
-
     }
 
     @Override
@@ -292,22 +246,22 @@ public class MapGameMapView extends AppCompatActivity
         LatLng dest = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude); // markerPoints.get(1);
 
         // move the camera
-        if((destMarker!= null && !marker.getId().equals(destMarker.getId()))
-                || (destMarker == null)){
+        if ((destMarker != null && !marker.getId().equals(destMarker.getId()))
+                || (destMarker == null)) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(dest)      // Sets the center of the map to Mountain View
                     .zoom(15)                   // Sets the zoom
                     .bearing(140)                // Sets the orientation of the camera to east
                     .tilt(60)      // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),5000,null);
+            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
         }
 
         //find whether you are near a coin
-        if(!marker.getTitle().equals("NotAvailable")) {
+        if (!marker.getTitle().equals("NotAvailable")) {
             //myLatlng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            if ((myLatlng.latitude+0.002 > dest.latitude) && (myLatlng.latitude-0.002 < dest.latitude)
-                    &&(myLatlng.longitude+0.002 > dest.longitude) &&(myLatlng.longitude-0.002 < dest.longitude)) {
+            if ((myLatlng.latitude + 0.002 > dest.latitude) && (myLatlng.latitude - 0.002 < dest.latitude)
+                    && (myLatlng.longitude + 0.002 > dest.longitude) && (myLatlng.longitude - 0.002 < dest.longitude)) {
 
                 score += 100;
                 mDatabase.child("mapGameRecords").child("Users").child(username).child("score").setValue(score);
@@ -320,9 +274,9 @@ public class MapGameMapView extends AppCompatActivity
                         .bearing(140)                // Sets the orientation of the camera to east
                         .tilt(60)// Sets the tilt of the camera to 30 degrees
                         .build();                   // Creates a CameraPosition from the builder
-                mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),5000,null);
+                mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
 
-                if(score >= level*200){
+                if (score >= level * 200) {
                     level += 1;
                     mDatabase.child("mapGameRecords").child("Users").child(username).child("level").setValue(level);
                     AlertDialog.Builder builder = new AlertDialog.Builder(MapGameMapView.this);
@@ -338,7 +292,7 @@ public class MapGameMapView extends AppCompatActivity
                                 }
                             });
                     mDialog = builder.show();
-                }else{
+                } else {
                     Intent street = new Intent(MapGameMapView.this, MapGameStreetView.class);
                     street.putExtra("lat", myLatlng);// usernameText.getText().toString());
                     startActivity(street);
@@ -346,7 +300,9 @@ public class MapGameMapView extends AppCompatActivity
                 destMarker = null;
 
                 return true;
-            } else{
+            }
+            //draw a direction line
+            else {
                 System.out.println("your level is !!!!" + score);
                 LatLng origin = myLatlng;
                 // Getting URL to the Google Directions API
@@ -358,7 +314,6 @@ public class MapGameMapView extends AppCompatActivity
                 updateMarker();
             }
         }
-
         return true;
     }
 
@@ -397,12 +352,19 @@ public class MapGameMapView extends AppCompatActivity
 
                 createNewMarker(point.latitude, point.longitude);
 
-                if (destMarker!=null) {
+                if (destMarker != null) {
                     onMarkerClick(destMarker);
-                }else updateMarker();
+                } else updateMarker();
             }
         });
     }
+
+    ////////////////////Above IS Game Logic/////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////FOLLOWING IS Calculating Direction//////////////////////////////////////////////
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -464,16 +426,18 @@ public class MapGameMapView extends AppCompatActivity
             onMarkerClick(destMarker);
             Location.distanceBetween(myLatlng.latitude, myLatlng.longitude,
                     destMarker.getPosition().latitude, destMarker.getPosition().longitude, result);
-            Toast toast = Toast.makeText(getApplicationContext(), result[0] +" meters to this COIN"
-                        , Toast.LENGTH_SHORT);
-                toast.show();
+            Toast toast = Toast.makeText(getApplicationContext(), result[0] + " meters to this COIN"
+                    , Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 
+    ////////////////////Above IS Calculating Direction//////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //////////ABOVE IS  GAME LOGIC CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    //////////FOLLOWING IS  GOOGLE MAP CURRENT LOCATION PERMISSION CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////FOLLOWING IS Location Permission////////////////////////////////////////////////
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -542,17 +506,15 @@ public class MapGameMapView extends AppCompatActivity
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
-    //////////ABOVE IS  GOOGLE MAP CURRENT LOCATION PERMISSION CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ////////////////////Above IS Location Permission////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    ///////////////////////////FOLLOWING IS  GOOGLE MAP DIRECTION CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////FOLLOWING IS Requesting Direction from Google///////////////////////////////////
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
@@ -683,7 +645,7 @@ public class MapGameMapView extends AppCompatActivity
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
 
-            if(result!= null) {
+            if (result != null) {
                 // Traversing through all the routes
                 for (int i = 0; i < result.size(); i++) {
                     points = new ArrayList<LatLng>();
@@ -710,7 +672,7 @@ public class MapGameMapView extends AppCompatActivity
                 }
                 // Drawing polyline in the Google Map for the i-th route
                 mGoogleMap.addPolyline(lineOptions);
-            }else {
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapGameMapView.this);
                 builder.setMessage("NO INTERNET CONNECTION!!!");
                 builder.setCancelable(false);
@@ -726,16 +688,46 @@ public class MapGameMapView extends AppCompatActivity
         }
     }
 
+
+    ////////////////////Above IS Requesting Direction from Google///////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     @Override
-    protected void onRestart(){
+    protected void onRestart() {
         super.onRestart();
         onConnected(Bundle.EMPTY);
     }
-//        @Override
-//        public boolean onCreateOptionsMenu(Menu menu) {
-//            // Inflate the menu; this adds items to the action bar if it is present.
-//            getMenuInflater().inflate(R.menu.main, menu);
-//            return true;
-//        }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //stop location updates when Activity is no longer active
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+
+        if (isSensorPresent) {
+            mSensorManager.unregisterListener(this);
+        }
+
+        saveUserList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isSensorPresent) {
+            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        String mStepsSinceReboot = (String.valueOf(event.values[0]));;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 }

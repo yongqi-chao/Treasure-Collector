@@ -44,15 +44,9 @@ public class MapGameLoginView extends AppCompatActivity
 
         //beep sound when match a user and password
 
-
         //a way of entering username
         usernameText = (EditText) findViewById(R.id.usernameText);
         usernameText.setOnClickListener(this);
-//            @Override
-//            public void onClick(View v) {
-//                usernameText.setText("");
-//            }
-//        });
         usernameText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         passwordText = (EditText) findViewById(R.id.passwordText);
@@ -209,11 +203,6 @@ public class MapGameLoginView extends AppCompatActivity
                 Toast.makeText(MapGameLoginView.this, "Authentication failed.",
                         Toast.LENGTH_SHORT).show();
             }
-
-
-
-
-
             //signOut();
         }else if (i == R.id.createUser) {
             if(!passwordText.getText().toString().isEmpty() && !usernameText.getText().toString().isEmpty()){
@@ -224,17 +213,7 @@ public class MapGameLoginView extends AppCompatActivity
                 Toast.makeText(MapGameLoginView.this, "Create Account Failed.",
                         Toast.LENGTH_SHORT).show();
             }
-
-
-
-
-
-            //signOut();
         }
-
-//            else if (i == R.id.verify_email_button) {
-//                sendEmailVerification();
-//            }
     }
 
     public ProgressDialog mProgressDialog;
